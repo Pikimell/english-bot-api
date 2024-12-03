@@ -1,0 +1,1377 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: English API
+  description: >
+    API documentation for managing users, groups, lessons, posts, and payments in an English learning platform.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:3000/dev
+    description: Local development server
+  - url: https://your-api-url.com/dev
+    description: Production server
+
+tags:
+  - name: Users
+    description: Endpoints related to user management
+  - name: Groups
+    description: Endpoints related to group management
+  - name: Lessons
+    description: Endpoints related to lesson management
+  - name: Payments
+    description: Endpoints related to payment management
+  - name: Posts
+    description: Endpoints related to content management
+
+paths:
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: user123
+                balance:
+                  type: number
+                  example: 100
+                level:
+                  type: string
+                  example: Beginner
+                groupId:
+                  type: string
+                  example: groupId123
+                isPaused:
+                  type: boolean
+                  example: false
+                showNotification:
+                  type: boolean
+                  example: true
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: user123
+                  balance:
+                    type: number
+                    example: 100
+                  level:
+                    type: string
+                    example: Beginner
+                  groupId:
+                    type: string
+                    example: groupId123
+                  isPaused:
+                    type: boolean
+                    example: false
+                  showNotification:
+                    type: boolean
+                    example: true
+
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      responses:
+        200:
+          description: List of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      example: user123
+                    balance:
+                      type: number
+                      example: 100
+                    level:
+                      type: string
+                      example: Beginner
+                    groupId:
+                      type: string
+                      example: groupId123
+                    isPaused:
+                      type: boolean
+                      example: false
+                    showNotification:
+                      type: boolean
+                      example: true
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      responses:
+        200:
+          description: User details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: user123
+                  balance:
+                    type: number
+                    example: 100
+                  level:
+                    type: string
+                    example: Beginner
+                  groupId:
+                    type: string
+                    example: groupId123
+                  isPaused:
+                    type: boolean
+                    example: false
+                  showNotification:
+                    type: boolean
+                    example: true
+        404:
+          description: User not found
+
+    put:
+      tags:
+        - Users
+      summary: Update a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                balance:
+                  type: number
+                  example: 200
+                level:
+                  type: string
+                  example: Intermediate
+                isPaused:
+                  type: boolean
+                  example: true
+                showNotification:
+                  type: boolean
+                  example: false
+      responses:
+        200:
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: user123
+                  balance:
+                    type: number
+                    example: 200
+                  level:
+                    type: string
+                    example: Intermediate
+                  isPaused:
+                    type: boolean
+                    example: true
+                  showNotification:
+                    type: boolean
+                    example: false
+        404:
+          description: User not found
+
+    delete:
+      tags:
+        - Users
+      summary: Delete a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      responses:
+        200:
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User deleted successfully
+        404:
+          description: User not found
+
+  /users/{id}/balance:
+    patch:
+      tags:
+        - Users
+      summary: Update user balance
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 50
+      responses:
+        200:
+          description: User balance updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: user123
+                  balance:
+                    type: number
+                    example: 150
+        404:
+          description: User not found
+
+  /lessons:
+    post:
+      tags:
+        - Lessons
+      summary: Create a new lesson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: user123
+                groupId:
+                  type: string
+                  example: group123
+                dateTime:
+                  type: string
+                  format: date-time
+                  example: '2024-01-01T10:00:00Z'
+                notes:
+                  type: string
+                  example: Introduction to Business English
+      responses:
+        201:
+          description: Lesson created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: lesson123
+                  userId:
+                    type: string
+                    example: user123
+                  groupId:
+                    type: string
+                    example: group123
+                  dateTime:
+                    type: string
+                    format: date-time
+                    example: '2024-01-01T10:00:00Z'
+                  notes:
+                    type: string
+                    example: Introduction to Business English
+
+    get:
+      tags:
+        - Lessons
+      summary: Get all lessons
+      responses:
+        200:
+          description: List of all lessons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: lesson123
+                    userId:
+                      type: string
+                      example: user123
+                    groupId:
+                      type: string
+                      example: group123
+                    dateTime:
+                      type: string
+                      format: date-time
+                      example: '2024-01-01T10:00:00Z'
+                    notes:
+                      type: string
+                      example: Introduction to Business English
+
+  /lessons/{id}:
+    get:
+      tags:
+        - Lessons
+      summary: Get a lesson by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the lesson
+          schema:
+            type: string
+      responses:
+        200:
+          description: Lesson details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: lesson123
+                  userId:
+                    type: string
+                    example: user123
+                  groupId:
+                    type: string
+                    example: group123
+                  dateTime:
+                    type: string
+                    format: date-time
+                    example: '2024-01-01T10:00:00Z'
+                  notes:
+                    type: string
+                    example: Introduction to Business English
+        404:
+          description: Lesson not found
+
+    put:
+      tags:
+        - Lessons
+      summary: Update a lesson by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the lesson
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: user123
+                groupId:
+                  type: string
+                  example: group123
+                dateTime:
+                  type: string
+                  format: date-time
+                  example: '2024-01-02T10:00:00Z'
+                notes:
+                  type: string
+                  example: Updated lesson notes
+      responses:
+        200:
+          description: Lesson updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: lesson123
+                  userId:
+                    type: string
+                    example: user123
+                  groupId:
+                    type: string
+                    example: group123
+                  dateTime:
+                    type: string
+                    format: date-time
+                    example: '2024-01-02T10:00:00Z'
+                  notes:
+                    type: string
+                    example: Updated lesson notes
+        404:
+          description: Lesson not found
+
+    delete:
+      tags:
+        - Lessons
+      summary: Delete a lesson by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the lesson
+          schema:
+            type: string
+      responses:
+        200:
+          description: Lesson deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lesson deleted successfully
+        404:
+          description: Lesson not found
+
+  /lessons/groups/{groupId}:
+    get:
+      tags:
+        - Lessons
+      summary: Get lessons by group ID
+      parameters:
+        - in: path
+          name: groupId
+          required: true
+          description: The ID of the group
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of lessons for the specified group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: lesson123
+                    userId:
+                      type: string
+                      example: user123
+                    groupId:
+                      type: string
+                      example: group123
+                    dateTime:
+                      type: string
+                      format: date-time
+                      example: '2024-01-01T10:00:00Z'
+                    notes:
+                      type: string
+                      example: Lesson notes
+
+  /lessons/users/{userId}:
+    get:
+      tags:
+        - Lessons
+      summary: Get lessons by user ID
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of lessons for the specified user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: lesson123
+                    userId:
+                      type: string
+                      example: user123
+                    groupId:
+                      type: string
+                      example: group123
+                    dateTime:
+                      type: string
+                      format: date-time
+                      example: '2024-01-01T10:00:00Z'
+                    notes:
+                      type: string
+                      example: Lesson notes
+
+  /groups:
+    post:
+      tags:
+        - Groups
+      summary: Create a new group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                level:
+                  type: string
+                  example: Intermediate
+                schedule:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                        example: Monday
+                      time:
+                        type: string
+                        example: 18:00
+                price:
+                  type: number
+                  example: 15
+                description:
+                  type: string
+                  example: Business English for professionals
+      responses:
+        201:
+          description: Group created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: groupId123
+                  level:
+                    type: string
+                    example: Intermediate
+                  schedule:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                          example: Monday
+                        time:
+                          type: string
+                          example: 18:00
+                  price:
+                    type: number
+                    example: 15
+                  description:
+                    type: string
+                    example: Business English for professionals
+
+    get:
+      tags:
+        - Groups
+      summary: Get all groups
+      responses:
+        200:
+          description: List of all groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: groupId123
+                    level:
+                      type: string
+                      example: Intermediate
+                    schedule:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          day:
+                            type: string
+                            example: Monday
+                          time:
+                            type: string
+                            example: 18:00
+                    price:
+                      type: number
+                      example: 15
+                    description:
+                      type: string
+                      example: Business English for professionals
+
+  /groups/{id}:
+    get:
+      tags:
+        - Groups
+      summary: Get a group by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the group
+          schema:
+            type: string
+      responses:
+        200:
+          description: Group details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: groupId123
+                  level:
+                    type: string
+                    example: Intermediate
+                  schedule:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                          example: Monday
+                        time:
+                          type: string
+                          example: 18:00
+                  price:
+                    type: number
+                    example: 15
+                  description:
+                    type: string
+                    example: Business English for professionals
+        404:
+          description: Group not found
+
+    put:
+      tags:
+        - Groups
+      summary: Update a group by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the group
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                level:
+                  type: string
+                  example: Advanced
+                schedule:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                        example: Tuesday
+                      time:
+                        type: string
+                        example: 19:00
+                price:
+                  type: number
+                  example: 20
+                description:
+                  type: string
+                  example: Advanced Business English
+      responses:
+        200:
+          description: Group updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: groupId123
+                  level:
+                    type: string
+                    example: Advanced
+                  schedule:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                          example: Tuesday
+                        time:
+                          type: string
+                          example: 19:00
+                  price:
+                    type: number
+                    example: 20
+                  description:
+                    type: string
+                    example: Advanced Business English
+        404:
+          description: Group not found
+
+    delete:
+      tags:
+        - Groups
+      summary: Delete a group by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the group
+          schema:
+            type: string
+      responses:
+        200:
+          description: Group deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group deleted successfully
+        404:
+          description: Group not found
+
+  /groups/{id}/students:
+    post:
+      tags:
+        - Groups
+      summary: Add a student to a group
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the group
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: user123
+      responses:
+        200:
+          description: Student added to group successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Student added successfully
+        404:
+          description: Group not found
+
+    delete:
+      tags:
+        - Groups
+      summary: Remove a student from a group
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the group
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: user123
+      responses:
+        200:
+          description: Student removed from group successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Student removed successfully
+        404:
+          description: Group not found
+
+  /posts:
+    post:
+      tags:
+        - Posts
+      summary: Create a new post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: '5 Tips for Learning English'
+                body:
+                  type: string
+                  example: 'Practice every day, listen to English podcasts...'
+                topic:
+                  type: string
+                  example: 'Learning Tips'
+                hashtags:
+                  type: array
+                  items:
+                    type: string
+                    example: '#English'
+      responses:
+        201:
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: post123
+                  title:
+                    type: string
+                    example: '5 Tips for Learning English'
+                  body:
+                    type: string
+                    example: 'Practice every day, listen to English podcasts...'
+                  topic:
+                    type: string
+                    example: 'Learning Tips'
+                  hashtags:
+                    type: array
+                    items:
+                      type: string
+                      example: '#English'
+
+    get:
+      tags:
+        - Posts
+      summary: Get all posts
+      responses:
+        200:
+          description: List of all posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: post123
+                    title:
+                      type: string
+                      example: '5 Tips for Learning English'
+                    body:
+                      type: string
+                      example: 'Practice every day, listen to English podcasts...'
+                    topic:
+                      type: string
+                      example: 'Learning Tips'
+                    hashtags:
+                      type: array
+                      items:
+                        type: string
+                        example: '#English'
+
+  /posts/{id}:
+    get:
+      tags:
+        - Posts
+      summary: Get a post by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the post
+          schema:
+            type: string
+      responses:
+        200:
+          description: Post details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: post123
+                  title:
+                    type: string
+                    example: '5 Tips for Learning English'
+                  body:
+                    type: string
+                    example: 'Practice every day, listen to English podcasts...'
+                  topic:
+                    type: string
+                    example: 'Learning Tips'
+                  hashtags:
+                    type: array
+                    items:
+                      type: string
+                      example: '#English'
+        404:
+          description: Post not found
+
+    put:
+      tags:
+        - Posts
+      summary: Update a post by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the post
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: 'Updated Tips for Learning English'
+                body:
+                  type: string
+                  example: 'Updated content for English learning tips...'
+                topic:
+                  type: string
+                  example: 'Advanced Learning Tips'
+                hashtags:
+                  type: array
+                  items:
+                    type: string
+                    example: '#AdvancedEnglish'
+      responses:
+        200:
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: post123
+                  title:
+                    type: string
+                    example: 'Updated Tips for Learning English'
+                  body:
+                    type: string
+                    example: 'Updated content for English learning tips...'
+                  topic:
+                    type: string
+                    example: 'Advanced Learning Tips'
+                  hashtags:
+                    type: array
+                    items:
+                      type: string
+                      example: '#AdvancedEnglish'
+        404:
+          description: Post not found
+
+    delete:
+      tags:
+        - Posts
+      summary: Delete a post by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the post
+          schema:
+            type: string
+      responses:
+        200:
+          description: Post deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post deleted successfully
+        404:
+          description: Post not found
+
+  /posts/topic:
+    get:
+      tags:
+        - Posts
+      summary: Get posts by topic
+      parameters:
+        - in: query
+          name: topic
+          required: true
+          description: The topic of the posts
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of posts for the specified topic
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: post123
+                    title:
+                      type: string
+                      example: 'Tips for Business English'
+                    body:
+                      type: string
+                      example: 'Start with learning basic vocabulary...'
+                    topic:
+                      type: string
+                      example: 'Business English'
+                    hashtags:
+                      type: array
+                      items:
+                        type: string
+                        example: '#BusinessEnglish'
+
+  /payments:
+    post:
+      tags:
+        - Payments
+      summary: Create a new payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: user123
+                amount:
+                  type: number
+                  example: 100
+                method:
+                  type: string
+                  example: 'LiqPay'
+                status:
+                  type: string
+                  enum:
+                    - successful
+                    - failed
+                  example: successful
+      responses:
+        201:
+          description: Payment created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: payment123
+                  userId:
+                    type: string
+                    example: user123
+                  amount:
+                    type: number
+                    example: 100
+                  method:
+                    type: string
+                    example: 'LiqPay'
+                  status:
+                    type: string
+                    example: successful
+                  date:
+                    type: string
+                    format: date-time
+                    example: '2024-01-01T10:00:00Z'
+
+    get:
+      tags:
+        - Payments
+      summary: Get all payments
+      responses:
+        200:
+          description: List of all payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: payment123
+                    userId:
+                      type: string
+                      example: user123
+                    amount:
+                      type: number
+                      example: 100
+                    method:
+                      type: string
+                      example: 'LiqPay'
+                    status:
+                      type: string
+                      example: successful
+                    date:
+                      type: string
+                      format: date-time
+                      example: '2024-01-01T10:00:00Z'
+
+  /payments/{id}:
+    get:
+      tags:
+        - Payments
+      summary: Get a payment by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the payment
+          schema:
+            type: string
+      responses:
+        200:
+          description: Payment details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: payment123
+                  userId:
+                    type: string
+                    example: user123
+                  amount:
+                    type: number
+                    example: 100
+                  method:
+                    type: string
+                    example: 'LiqPay'
+                  status:
+                    type: string
+                    example: successful
+                  date:
+                    type: string
+                    format: date-time
+                    example: '2024-01-01T10:00:00Z'
+        404:
+          description: Payment not found
+
+    patch:
+      tags:
+        - Payments
+      summary: Update payment status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the payment
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - successful
+                    - failed
+                  example: failed
+      responses:
+        200:
+          description: Payment status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: payment123
+                  userId:
+                    type: string
+                    example: user123
+                  amount:
+                    type: number
+                    example: 100
+                  method:
+                    type: string
+                    example: 'LiqPay'
+                  status:
+                    type: string
+                    example: failed
+                  date:
+                    type: string
+                    format: date-time
+                    example: '2024-01-01T10:00:00Z'
+        404:
+          description: Payment not found
+
+    delete:
+      tags:
+        - Payments
+      summary: Delete a payment by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the payment
+          schema:
+            type: string
+      responses:
+        200:
+          description: Payment deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Payment deleted successfully
+        404:
+          description: Payment not found
+
+  /payments/user/{userId}:
+    get:
+      tags:
+        - Payments
+      summary: Get payments by user ID
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of payments for the specified user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: payment123
+                    userId:
+                      type: string
+                      example: user123
+                    amount:
+                      type: number
+                      example: 100
+                    method:
+                      type: string
+                      example: 'LiqPay'
+                    status:
+                      type: string
+                      example: successful
+                    date:
+                      type: string
+                      format: date-time
+                      example: '2024-01-01T10:00:00Z'

@@ -1,5 +1,5 @@
 org: author
-service: AWS-BACKEND
+service: english-api
 
 frameworkVersion: '3'
 
@@ -13,38 +13,312 @@ provider:
   runtime: nodejs18.x
   region: us-east-2
   stage: dev
-  profile: serverlessTemplate
+  profile: serverlessUser
   timeout: 20
 
 functions:
-  templateGet:
-    handler: src/handlers/templates/getTemplateHandler.getTemplateHandler
+  # !============ User Handlers ===============
+  # Отримати користувача за ID
+  getUser:
+    handler: src/handlers/userHandlers.getUserHandler
     events:
       - http:
-          path: template
+          path: users/{id}
           method: get
           cors: true
 
-  templatePost:
-    handler: src/handlers/templates/createTemplateHandler.createTemplateHandler
+  # Створити нового користувача
+  createUser:
+    handler: src/handlers/userHandlers.createUserHandler
     events:
       - http:
-          path: templates
+          path: users
           method: post
           cors: true
 
-  templatePut:
-    handler: src/handlers/templates/putTemplateHandler.putTemplateHandler
+  # Оновити інформацію про користувача
+  updateUser:
+    handler: src/handlers/userHandlers.updateUserHandler
     events:
       - http:
-          path: templates/{templateId}
+          path: users/{id}
           method: put
           cors: true
 
-  templateDelete:
-    handler: src/handlers/templates/deleteTemplateHandler.deleteTemplateHandler
+  # Видалити користувача
+  deleteUser:
+    handler: src/handlers/userHandlers.deleteUserHandler
     events:
       - http:
-          path: templates/{templateId}
+          path: users/{id}
+          method: delete
+          cors: true
+
+  # Отримати список всіх користувачів
+  getAllUsers:
+    handler: src/handlers/userHandlers.getAllUsersHandler
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+
+  # Оновити баланс користувача
+  updateBalance:
+    handler: src/handlers/userHandlers.updateBalanceHandler
+    events:
+      - http:
+          path: users/{id}/balance
+          method: patch
+          cors: true
+
+  # Додати результат тесту користувачу
+  addTestResult:
+    handler: src/handlers/userHandlers.addTestResultHandler
+    events:
+      - http:
+          path: users/{id}/test-result
+          method: post
+          cors: true
+
+  # Отримати всіх користувачів із низьким балансом
+  getUsersWithLowBalance:
+    handler: src/handlers/userHandlers.getUsersWithLowBalanceHandler
+    events:
+      - http:
+          path: users/low-balance
+          method: get
+          cors: true
+
+  # Прив’язати користувача до групи
+  assignToGroup:
+    handler: src/handlers/userHandlers.assignToGroupHandler
+    events:
+      - http:
+          path: users/{id}/group
+          method: patch
+          cors: true
+
+  # Відкріпити користувача від групи
+  removeFromGroup:
+    handler: src/handlers/userHandlers.removeFromGroupHandler
+    events:
+      - http:
+          path: users/{id}/group
+          method: delete
+          cors: true
+
+  # !============== Group Handlers ===============
+  createGroup:
+    handler: src/handlers/groupHandlers.createGroupHandler
+    events:
+      - http:
+          path: groups
+          method: post
+          cors: true
+
+  getGroupById:
+    handler: src/handlers/groupHandlers.getGroupByIdHandler
+    events:
+      - http:
+          path: groups/{id}
+          method: get
+          cors: true
+
+  getAllGroups:
+    handler: src/handlers/groupHandlers.getAllGroupsHandler
+    events:
+      - http:
+          path: groups
+          method: get
+          cors: true
+
+  updateGroupById:
+    handler: src/handlers/groupHandlers.updateGroupByIdHandler
+    events:
+      - http:
+          path: groups/{id}
+          method: put
+          cors: true
+
+  deleteGroupById:
+    handler: src/handlers/groupHandlers.deleteGroupByIdHandler
+    events:
+      - http:
+          path: groups/{id}
+          method: delete
+          cors: true
+
+  addStudentToGroup:
+    handler: src/handlers/groupHandlers.addStudentToGroupHandler
+    events:
+      - http:
+          path: groups/{id}/students
+          method: post
+          cors: true
+
+  removeStudentFromGroup:
+    handler: src/handlers/groupHandlers.removeStudentFromGroupHandler
+    events:
+      - http:
+          path: groups/{id}/students
+          method: delete
+          cors: true
+
+  # !============== Lesson Handlers ===============
+
+  createLesson:
+    handler: src/handlers/lessonHandlers.createLessonHandler
+    events:
+      - http:
+          path: lessons
+          method: post
+          cors: true
+
+  getLessonById:
+    handler: src/handlers/lessonHandlers.getLessonByIdHandler
+    events:
+      - http:
+          path: lessons/{id}
+          method: get
+          cors: true
+
+  getAllLessons:
+    handler: src/handlers/lessonHandlers.getAllLessonsHandler
+    events:
+      - http:
+          path: lessons
+          method: get
+          cors: true
+
+  getLessonsByGroup:
+    handler: src/handlers/lessonHandlers.getLessonsByGroupHandler
+    events:
+      - http:
+          path: lessons/groups/{groupId}
+          method: get
+          cors: true
+
+  getLessonsByUser:
+    handler: src/handlers/lessonHandlers.getLessonsByUserHandler
+    events:
+      - http:
+          path: lessons/users/{userId}
+          method: get
+          cors: true
+
+  updateLessonById:
+    handler: src/handlers/lessonHandlers.updateLessonByIdHandler
+    events:
+      - http:
+          path: lessons/{id}
+          method: put
+          cors: true
+
+  deleteLessonById:
+    handler: src/handlers/lessonHandlers.deleteLessonByIdHandler
+    events:
+      - http:
+          path: lessons/{id}
+          method: delete
+          cors: true
+
+  markAttendance:
+    handler: src/handlers/lessonHandlers.markAttendanceHandler
+    events:
+      - http:
+          path: lessons/{id}/attendance
+          method: patch
+          cors: true
+
+  # !============== Payment Handlers ===============
+
+  createPayment:
+    handler: src/handlers/paymentHandlers.createPaymentHandler
+    events:
+      - http:
+          path: payments
+          method: post
+          cors: true
+
+  getPaymentById:
+    handler: src/handlers/paymentHandlers.getPaymentByIdHandler
+    events:
+      - http:
+          path: payments/{id}
+          method: get
+          cors: true
+
+  getAllPayments:
+    handler: src/handlers/paymentHandlers.getAllPaymentsHandler
+    events:
+      - http:
+          path: payments
+          method: get
+          cors: true
+
+  updatePaymentStatus:
+    handler: src/handlers/paymentHandlers.updatePaymentStatusHandler
+    events:
+      - http:
+          path: payments/{id}/status
+          method: patch
+          cors: true
+
+  deletePaymentById:
+    handler: src/handlers/paymentHandlers.deletePaymentByIdHandler
+    events:
+      - http:
+          path: payments/{id}
+          method: delete
+          cors: true
+
+  # !============== Post Handlers ===============
+
+  createPost:
+    handler: src/handlers/postHandlers.createPostHandler
+    events:
+      - http:
+          path: posts
+          method: post
+          cors: true
+
+  getPostById:
+    handler: src/handlers/postHandlers.getPostByIdHandler
+    events:
+      - http:
+          path: posts/{id}
+          method: get
+          cors: true
+
+  getAllPosts:
+    handler: src/handlers/postHandlers.getAllPostsHandler
+    events:
+      - http:
+          path: posts
+          method: get
+          cors: true
+
+  getPostsByTopic:
+    handler: src/handlers/postHandlers.getPostsByTopicHandler
+    events:
+      - http:
+          path: posts/topic
+          method: get
+          cors: true
+
+  updatePostById:
+    handler: src/handlers/postHandlers.updatePostByIdHandler
+    events:
+      - http:
+          path: posts/{id}
+          method: put
+          cors: true
+
+  deletePostById:
+    handler: src/handlers/postHandlers.deletePostByIdHandler
+    events:
+      - http:
+          path: posts/{id}
           method: delete
           cors: true

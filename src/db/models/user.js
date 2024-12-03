@@ -1,27 +1,38 @@
 import { model, Schema } from 'mongoose';
+
 const userSchema = new Schema(
   {
-    nickname: {
-      type: String,
-      required: true,
-      unique: true,
+    userId: { type: String, required: true, unique: true },
+    balance: { type: Number, default: 0 },
+    level: { type: String },
+    groupId: { type: Schema.Types.ObjectId, ref: 'Group', default: null },
+    isPaused: { type: Boolean, default: false },
+    showNotification: { type: Boolean, default: true },
+    contactInfo: {
+      email: { type: String },
+      phone: { type: String },
     },
-    password: {},
-    gender: {
+    testResults: [
+      {
+        testId: { type: String },
+        score: { type: Number },
+        date: { type: Date },
+      },
+    ],
+    trialLessonStatus: {
       type: String,
-      required: true,
-      enum: ['Male', 'Female'],
+      enum: ['not_taken', 'scheduled', 'completed'],
+      default: 'not_taken',
+    },
+    notificationsSettings: {
+      lessonReminders: { type: Boolean, default: true },
+      paymentReminders: { type: Boolean, default: true },
     },
   },
-  {
-    versionKey: false,
-  },
+  { timestamps: true, versionKey: false },
 );
 
-userSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-  return obj;
-};
+userSchema.index({ userId: 1 });
+userSchema.index({ groupId: 1 });
 
-export const UserCollection = model('users', userSchema);
+export const UserCollection = model('User', userSchema);

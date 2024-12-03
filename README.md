@@ -1,68 +1,287 @@
-<!--
-title: 'AWS NodeJS Example'
-description: 'This template demonstrates how to deploy a simple NodeJS function running on AWS Lambda using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: nodeJS
-priority: 1
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# English API Documentation
 
-# Serverless Framework AWS NodeJS Example
+This repository contains the API for managing groups, lessons, payments, and posts for an English language teaching platform. The API is built using AWS Lambda, integrated with the Serverless Framework.
 
-This template demonstrates how to deploy a simple NodeJS function running on AWS Lambda using the Serverless Framework. The deployed function does not include any event definitions or any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which include use cases like API endpoints, workers triggered by SQS, persistence with DynamoDB, and scheduled tasks. For details about configuration of specific events, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
-
-## Usage
-
-### Deployment
-
-In order to deploy the example, you need to run the following command:
+## Base URL
 
 ```
-serverless deploy
+https://{your-api-gateway-url}/dev
 ```
 
-After running deploy, you should see output similar to:
+---
 
-```
-Deploying "aws-node" to stage "dev" (us-east-1)
+## Endpoints
 
-✔ Service deployed to stack aws-node-dev (90s)
+### **Groups**
 
-functions:
-  hello: aws-node-dev-hello (1.5 kB)
-```
+#### Create a Group
 
-### Invocation
+- **URL:** `/groups`
+- **Method:** `POST`
+- **Request Body:**
+  ```json
+  {
+    "level": "Intermediate",
+    "schedule": [
+      { "day": "Monday", "time": "18:00" },
+      { "day": "Wednesday", "time": "18:00" }
+    ],
+    "price": 15,
+    "description": "Business English for professionals"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "id": "groupId",
+    "level": "Intermediate",
+    "schedule": [...],
+    "price": 15,
+    "description": "Business English for professionals"
+  }
+  ```
 
-After successful deployment, you can invoke the deployed function by using the following command:
+#### Get a Group by ID
 
-```
-serverless invoke --function hello
-```
+- **URL:** `/groups/{id}`
+- **Method:** `GET`
+- **Response:**
+  ```json
+  {
+    "id": "groupId",
+    "level": "Intermediate",
+    "schedule": [...],
+    "price": 15,
+    "description": "Business English for professionals"
+  }
+  ```
 
-Which should result in response similar to the following:
+#### Get All Groups
 
-```json
-{
-  "statusCode": 200,
-  "body": "{\"message\":\"Go Serverless v4.0! Your function executed successfully!\"}"
-}
-```
+- **URL:** `/groups`
+- **Method:** `GET`
+- **Response:**
+  ```json
+  [
+    { "id": "groupId1", "level": "Intermediate", ... },
+    { "id": "groupId2", "level": "Advanced", ... }
+  ]
+  ```
 
-### Local development
+#### Update a Group
 
-The easiest way to develop and test your function is to use the Serverless Framework's `dev` command:
+- **URL:** `/groups/{id}`
+- **Method:** `PUT`
+- **Request Body:** Same as Create a Group.
+- **Response:** Updated group object.
 
-```
-serverless dev
-```
+#### Delete a Group
 
-This will start a local emulator of AWS Lambda and tunnel your requests to and from AWS Lambda, allowing you to interact with your function as if it were running in the cloud.
+- **URL:** `/groups/{id}`
+- **Method:** `DELETE`
+- **Response:**
+  ```json
+  { "message": "Group deleted successfully" }
+  ```
 
-Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
+#### Add a Student to a Group
 
-When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.
+- **URL:** `/groups/{id}/students`
+- **Method:** `POST`
+- **Request Body:**
+  ```json
+  { "userId": "userId" }
+  ```
+- **Response:** Updated group object.
+
+#### Remove a Student from a Group
+
+- **URL:** `/groups/{id}/students`
+- **Method:** `DELETE`
+- **Request Body:** Same as Add a Student to a Group.
+- **Response:** Updated group object.
+
+---
+
+### **Lessons**
+
+#### Create a Lesson
+
+- **URL:** `/lessons`
+- **Method:** `POST`
+- **Request Body:**
+  ```json
+  {
+    "userId": "userId",
+    "groupId": "groupId",
+    "dateTime": "2024-01-01T10:00:00Z",
+    "notes": "Introduction to Business English"
+  }
+  ```
+- **Response:** Created lesson object.
+
+#### Get a Lesson by ID
+
+- **URL:** `/lessons/{id}`
+- **Method:** `GET`
+- **Response:** Lesson object.
+
+#### Get All Lessons
+
+- **URL:** `/lessons`
+- **Method:** `GET`
+- **Response:** Array of lesson objects.
+
+#### Get Lessons by Group
+
+- **URL:** `/lessons/groups/{groupId}`
+- **Method:** `GET`
+- **Response:** Array of lessons for the group.
+
+#### Get Lessons by User
+
+- **URL:** `/lessons/users/{userId}`
+- **Method:** `GET`
+- **Response:** Array of lessons for the user.
+
+#### Update a Lesson
+
+- **URL:** `/lessons/{id}`
+- **Method:** `PUT`
+- **Request Body:** Same as Create a Lesson.
+- **Response:** Updated lesson object.
+
+#### Delete a Lesson
+
+- **URL:** `/lessons/{id}`
+- **Method:** `DELETE`
+- **Response:**
+  ```json
+  { "message": "Lesson deleted successfully" }
+  ```
+
+#### Mark Attendance
+
+- **URL:** `/lessons/{id}/attendance`
+- **Method:** `PATCH`
+- **Request Body:**
+  ```json
+  { "attendance": "present" }
+  ```
+- **Response:** Updated lesson object.
+
+---
+
+### **Payments**
+
+#### Create a Payment
+
+- **URL:** `/payments`
+- **Method:** `POST`
+- **Request Body:**
+  ```json
+  {
+    "userId": "userId",
+    "amount": 100,
+    "method": "LiqPay",
+    "status": "successful"
+  }
+  ```
+- **Response:** Created payment object.
+
+#### Get a Payment by ID
+
+- **URL:** `/payments/{id}`
+- **Method:** `GET`
+- **Response:** Payment object.
+
+#### Get All Payments
+
+- **URL:** `/payments`
+- **Method:** `GET`
+- **Response:** Array of payment objects.
+
+#### Update Payment Status
+
+- **URL:** `/payments/{id}/status`
+- **Method:** `PATCH`
+- **Request Body:**
+  ```json
+  { "status": "failed" }
+  ```
+- **Response:** Updated payment object.
+
+#### Delete a Payment
+
+- **URL:** `/payments/{id}`
+- **Method:** `DELETE`
+- **Response:**
+  ```json
+  { "message": "Payment deleted successfully" }
+  ```
+
+---
+
+### **Posts**
+
+#### Create a Post
+
+- **URL:** `/posts`
+- **Method:** `POST`
+- **Request Body:**
+  ```json
+  {
+    "title": "5 Tips for Learning English",
+    "body": "Practice every day...",
+    "topic": "Learning Tips",
+    "hashtags": ["#English", "#Tips"]
+  }
+  ```
+- **Response:** Created post object.
+
+#### Get a Post by ID
+
+- **URL:** `/posts/{id}`
+- **Method:** `GET`
+- **Response:** Post object.
+
+#### Get All Posts
+
+- **URL:** `/posts`
+- **Method:** `GET`
+- **Response:** Array of post objects.
+
+#### Get Posts by Topic
+
+- **URL:** `/posts/topic`
+- **Method:** `GET`
+- **Query Parameters:**
+  ```json
+  { "topic": "Learning Tips" }
+  ```
+- **Response:** Array of posts for the topic.
+
+#### Update a Post
+
+- **URL:** `/posts/{id}`
+- **Method:** `PUT`
+- **Request Body:** Same as Create a Post.
+- **Response:** Updated post object.
+
+#### Delete a Post
+
+- **URL:** `/posts/{id}`
+- **Method:** `DELETE`
+- **Response:**
+  ```json
+  { "message": "Post deleted successfully" }
+  ```
+
+---
+
+## Notes
+
+- All endpoints support **CORS**.
+- Replace `{your-api-gateway-url}` with your actual API Gateway URL.
+- All responses are JSON formatted.
+- Fields like `id`, `userId`, and `groupId` are placeholders and should be replaced with actual values from your database.
