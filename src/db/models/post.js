@@ -6,6 +6,10 @@ const postSchema = new Schema(
     body: { type: String, required: true },
     topic: { type: String },
     hashtags: [{ type: String }],
+    isPosted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true, versionKey: false },
 );
