@@ -17,6 +17,16 @@ provider:
   timeout: 20
 
 functions:
+  # !============ Telegram Handlers ===============
+
+  telegramHook:
+    handler: src/handlers/telegramHandlers.telegramHandler
+    events:
+      - http:
+          path: /telegramHook/{token}
+          method: post
+          cors: true
+
   # !============ User Handlers ===============
   # Отримати користувача за ID
   getUser:
