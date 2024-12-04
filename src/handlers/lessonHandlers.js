@@ -1,4 +1,4 @@
-import { ctrlWrapper } from '../../utils/ctrlWrapper.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   createLesson,
   getLessonById,
@@ -7,7 +7,6 @@ import {
   getLessonsByUser,
   updateLessonById,
   deleteLessonById,
-  markAttendance,
 } from '../controllers/lessonControllers.js';
 
 export const createLessonHandler = async (event, context) => {

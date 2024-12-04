@@ -1,5 +1,5 @@
 org: author
-service: english-api
+service: english-bot-api
 
 frameworkVersion: '3'
 
