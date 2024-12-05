@@ -1,5 +1,5 @@
 import { UserCollection } from '../db/models/user.js';
-import { userServices } from './userServices.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 export const userServices = {
   // Створити нового користувача
@@ -43,7 +43,6 @@ export const userServices = {
       data: users,
       ...paginationData,
     };
-    return await UserCollection.find(filter);
   },
 
   // Оновити дані користувача

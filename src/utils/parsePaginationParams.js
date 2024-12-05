@@ -1,5 +1,3 @@
-import { query } from 'express';
-
 const parseNumber = (number, defaultValue) => {
   const isString = typeof number === 'string';
   if (!isString) return defaultValue;

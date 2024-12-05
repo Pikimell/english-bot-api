@@ -1,6 +1,9 @@
 import { botSendMessage } from '../services/telegramServices';
 import { userServices } from '../services/userServices';
 import { USER_MENU } from '../telegram/models/user-keyboard';
+import { parseLessonFilterParams } from '../utils/parseFilterParams';
+import { parsePaginationParams } from '../utils/parsePaginationParams';
+import { parseLessonsSortParams } from '../utils/parseSortParams';
 import { response } from '../utils/response'; // Утиліта для уніфікованої відповіді
 
 // Отримати користувача за ID
@@ -66,7 +69,7 @@ export const deleteUser = async (event) => {
 };
 
 // Отримати всіх користувачів
-export const getAllUsers = async () => {
+export const getAllUsers = async (event) => {
   const query = event.queryStringParameters;
   const filters = parseLessonFilterParams(query);
   const sort = parseLessonsSortParams(query);
