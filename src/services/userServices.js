@@ -1,4 +1,4 @@
-import { UserCollection } from '../db/models/user';
+import { UserCollection } from '../db/models/user.js';
 
 export const userServices = {
   // Створити нового користувача

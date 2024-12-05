@@ -9,8 +9,11 @@ const userSchema = new Schema(
     isPaused: { type: Boolean, default: false },
     showNotification: { type: Boolean, default: true },
     contactInfo: {
+      username: { type: String },
+      first_name: { type: String },
       email: { type: String },
       phone: { type: String },
+      language_code: { type: String },
     },
     testResults: [
       {

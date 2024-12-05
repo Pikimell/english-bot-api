@@ -27,6 +27,16 @@ functions:
           method: post
           cors: true
 
+  # !============ Google Form Handlers ===============
+
+  googleFormHook:
+    handler: src/handlers/telegramHandlers.googleFormHandler
+    events:
+      - http:
+          path: /googleForm
+          method: post
+          cors: true
+
   # !============ User Handlers ===============
   # Отримати користувача за ID
   getUser:

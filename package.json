@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "sls offline start",
+    "bot": "node src/telegram/init-bot.js",
     "push": "git add . && git commit -m 'update' && git push",
     "build-docs": "redocly bundle --ext json -o docs/swagger.json",
     "preview-docs": "redocly preview-docs"
