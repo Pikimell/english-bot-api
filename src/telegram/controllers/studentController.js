@@ -1,4 +1,5 @@
 import bot from '../connect.js';
+import { USER_MENU } from '../models/user-keyboard.js';
 import { getChatId, sendAdminMessage } from '../services/helpers.js';
 import {
   adminTestLessonMessage,
@@ -16,9 +17,16 @@ async function onTestLesson(msg) {
   bot.sendMessage(chatId, testLessonMessage(), { parse_mode: 'HTML' });
   sendAdminMessage(adminTestLessonMessage(user));
 }
+
 async function onCheckLevel(msg) {
   const chatId = getChatId(msg);
+  bot.sendMessage(chatId, 'Оберіть тест для проходження:', {
+    reply_markup: {
+      inline_keyboard: USER_MENU.testList,
+    },
+  });
 }
+
 async function onBalance(msg) {
   const chatId = getChatId(msg);
 }

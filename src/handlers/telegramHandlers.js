@@ -19,9 +19,12 @@ export const telegramHandler = async (event, context) => {
 export const googleFormHandler = async (event, context) => {
   const ctrl = ctrlWrapper((event, context) => {
     const body = event.body;
-
+    const json = JSON.stringify(body);
     for (const admin of ADMINS) {
-      sendMessage(admin, 'Щойно було пройдено тест новим користувачем!');
+      sendMessage(
+        admin,
+        `Щойно було пройдено тест новим користувачем!\n\n${json}`,
+      );
     }
     return response(200)(body);
   });

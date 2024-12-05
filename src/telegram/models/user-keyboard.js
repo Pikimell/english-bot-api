@@ -8,4 +8,19 @@ export const USER_MENU = {
     [{ text: TRIGGER.student.schedule }],
     [{ text: TRIGGER.student.priceList }],
   ],
+  testList: [
+    [{ text: 'Базовий тест', url: 'https://forms.gle/1QHGBBk6rJ6wH5YSA' }],
+    [
+      { text: 'Екзамен А1', url: 'https://forms.gle/1QHGBBk6rJ6wH5YSA' },
+      { text: 'Екзамен А2', url: 'https://forms.gle/1QHGBBk6rJ6wH5YSA' },
+    ],
+    [
+      { text: 'Екзамен B1', url: 'https://forms.gle/1QHGBBk6rJ6wH5YSA' },
+      { text: 'Екзамен B2', url: 'https://forms.gle/1QHGBBk6rJ6wH5YSA' },
+    ],
+    [
+      { text: 'Екзамен C1', url: 'https://forms.gle/1QHGBBk6rJ6wH5YSA' },
+      { text: 'Екзамен C2', url: 'https://forms.gle/1QHGBBk6rJ6wH5YSA' },
+    ],
+  ],
 };
