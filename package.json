@@ -2,7 +2,6 @@
   "name": "aws-backend",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "scripts": {
     "start": "sls offline start",
     "bot": "node src/telegram/init-bot.js",

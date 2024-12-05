@@ -1,4 +1,7 @@
 import { lessonServices } from '../services/lessonServices';
+import { parseLessonFilterParams } from '../utils/parseFilterParams';
+import { parsePaginationParams } from '../utils/parsePaginationParams';
+import { parseLessonsSortParams } from '../utils/parseSortParams';
 import { response } from '../utils/response';
 
 export const createLesson = async (event) => {
@@ -18,8 +21,17 @@ export const getLessonById = async (event) => {
   return response(200)(lesson);
 };
 
-export const getAllLessons = async () => {
-  const lessons = await lessonServices.getAllLessons();
+export const getAllLessons = async (event) => {
+  const query = event.queryStringParameters;
+  const filters = parseLessonFilterParams(query);
+  const sort = parseLessonsSortParams(query);
+  const pagination = parsePaginationParams(query);
+
+  const lessons = await lessonServices.getAllLessons({
+    filters,
+    sort,
+    pagination,
+  });
   return response(200)(lessons);
 };
 

@@ -67,7 +67,16 @@ export const deleteUser = async (event) => {
 
 // Отримати всіх користувачів
 export const getAllUsers = async () => {
-  const users = await userServices.getAllUsers();
+  const query = event.queryStringParameters;
+  const filters = parseLessonFilterParams(query);
+  const sort = parseLessonsSortParams(query);
+  const pagination = parsePaginationParams(query);
+
+  const users = await userServices.getAllUsers({
+    filters,
+    sort,
+    pagination,
+  });
   return response(200)(users);
 };
 

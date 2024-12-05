@@ -1,5 +1,5 @@
 import { UserCollection } from '../db/models/user.js';
-import { lessonServices } from './lessonServices.js';
+import { userServices } from './userServices.js';
 
 export const userServices = {
   // Створити нового користувача
@@ -14,7 +14,35 @@ export const userServices = {
   },
 
   // Отримати всіх користувачів
-  async getAllUsers(filter = {}) {
+  async getAllUsers({ filters, sort, pagination }) {
+    const { page = 1, perPage = 10 } = pagination;
+
+    const { sortBy = 'createdAt', sortOrder = 'asc' } = sort;
+
+    const limit = perPage;
+    const skip = (page - 1) * perPage;
+
+    const usersQuery = UserCollection.find(filters);
+
+    const usersCountPromise = UserCollection.countDocuments(filters);
+
+    const usersPromise = usersQuery
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder })
+      .exec();
+
+    const [usersCount, users] = await Promise.all([
+      usersCountPromise,
+      usersPromise,
+    ]);
+
+    const paginationData = calculatePaginationData(usersCount, page, perPage);
+
+    return {
+      data: users,
+      ...paginationData,
+    };
     return await UserCollection.find(filter);
   },
 
@@ -115,16 +143,16 @@ export const userServices = {
 
   // Отримати всіх користувачів, які проходять пробний урок
   async getTrialUsers() {
-    return await UserCollection.find({ trialLessonStatus: 'scheduled' });
+    return await UserCollection.find({ trialUserStatus: 'scheduled' });
   },
 
   async getUserBalance(userId) {
     const userPromise = UserCollection.findOne({ userId });
-    const lessonsPromise = lessonServices.getLessonsByUser(userId);
-    const promises = [userPromise, lessonsPromise];
-    const [user, lessons] = await Promise.all(promises);
+    const usersPromise = userServices.getUsersByUser(userId);
+    const promises = [userPromise, usersPromise];
+    const [user, users] = await Promise.all(promises);
 
-    const totalSpent = lessons.reduce((sum, el) => {
+    const totalSpent = users.reduce((sum, el) => {
       return (sum += el.price);
     }, 0);
 
@@ -134,7 +162,7 @@ export const userServices = {
       userId,
       totalSpent,
       totalBalance: user.balance,
-      totalLessons: lessons.length,
+      totalUsers: users.length,
       balance: totalSpent - user.balance,
     };
 
