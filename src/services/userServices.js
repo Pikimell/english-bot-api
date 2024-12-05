@@ -1,4 +1,5 @@
 import { UserCollection } from '../db/models/user.js';
+import { lessonServices } from './lessonServices.js';
 
 export const userServices = {
   // Створити нового користувача
@@ -115,5 +116,29 @@ export const userServices = {
   // Отримати всіх користувачів, які проходять пробний урок
   async getTrialUsers() {
     return await UserCollection.find({ trialLessonStatus: 'scheduled' });
+  },
+
+  async getUserBalance(userId) {
+    const userPromise = UserCollection.findOne({ userId });
+    const lessonsPromise = lessonServices.getLessonsByUser(userId);
+    const promises = [userPromise, lessonsPromise];
+    const [user, lessons] = await Promise.all(promises);
+
+    const totalSpent = lessons.reduce((sum, el) => {
+      return (sum += el.price);
+    }, 0);
+
+    console.log(user);
+
+    const result = {
+      userId,
+      totalSpent,
+      totalBalance: user.balance,
+      totalLessons: lessons.length,
+      balance: totalSpent - user.balance,
+    };
+
+    console.log(result);
+    return result;
   },
 };

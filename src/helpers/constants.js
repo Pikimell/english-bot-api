@@ -8,3 +8,9 @@ export const ONE_WEEK = ONE_DAY * 7;
 export const ONE_MONTH = ONE_DAY * 31;
 export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
 export const ADMINS = ['433982686'];
+
+export const PAYMENT = {
+  PORTMONE: env('PORTMONE'),
+  WALLET: env('WALLET'),
+  UNLIMIT: env('UNLIMIT'),
+};

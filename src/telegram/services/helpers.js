@@ -5,7 +5,7 @@ export function isAdmin(id) {
 }
 
 export function getChatId(obj = {}) {
-  return obj?.chat?.id || obj?.from?.id;
+  return `${obj?.chat?.id || obj?.from?.id}`;
 }
 
 export function deleteMsg(chatId, msgId) {

@@ -1,20 +1,22 @@
 import { deleteMsg, getChatId } from './helpers.js';
 import bot from '../connect.js';
 
-export async function PAYMENT_DIALOG(chatId) {
+export async function paymentDialog(chatId) {
   return new Promise((resolve, reject) => {
-    bot.sendMessage(chatId, 'Оберіть спосіб проплати', {
+    bot.sendMessage(chatId, 'Оберіть спосіб оплати', {
       reply_markup: {
         inline_keyboard: [
-          [{ text: 'При отриманні', callback_data: 'pay_nalik' }],
-          [{ text: 'Оплатити зараз', callback_data: 'pay_now' }],
+          [{ text: 'Portmone', callback_data: 'paymentMethod_portmone' }],
+          [{ text: 'Ton Wallet', callback_data: 'paymentMethod_wallet' }],
+          [{ text: 'TRC20', callback_data: 'paymentMethod_TRC20' }],
+          [{ text: 'Monobank', callback_data: 'paymentMethod_MONO' }],
         ],
       },
     });
     function callback(query) {
       if (getChatId(query.message) !== chatId) return;
       const data = query.data.split('_');
-      if (data[0] != 'pay') return;
+      if (data[0] != 'paymentMethod') return;
       resolve(data[1]);
       deleteMsg(chatId, query.message.message_id);
       bot.removeListener('callback_query', callback);

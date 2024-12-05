@@ -5,6 +5,9 @@ export const USER_MENU = {
     [{ text: TRIGGER.student.testLesson }],
     [{ text: TRIGGER.student.checkLevel }],
     [{ text: TRIGGER.student.balance }],
+  ],
+  secondScreen: [
+    [{ text: TRIGGER.student.balance }],
     [{ text: TRIGGER.student.schedule }],
     [{ text: TRIGGER.student.priceList }],
   ],

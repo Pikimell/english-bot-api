@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 
 const lessonSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: String, required: true },
     groupId: { type: Schema.Types.ObjectId, ref: 'Group', required: true },
     dateTime: { type: Date, required: true },
     notes: { type: String },

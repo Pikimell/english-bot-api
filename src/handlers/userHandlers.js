@@ -10,6 +10,7 @@ import {
   getUsersWithLowBalance,
   assignToGroup,
   removeFromGroup,
+  updateUserLevel,
 } from '../controllers/userControllers.js';
 
 export const getUserHandler = async (event, context) => {
@@ -56,7 +57,10 @@ export const assignToGroupHandler = async (event, context) => {
   const ctrl = ctrlWrapper(assignToGroup);
   return await ctrl(event, context);
 };
-
+export const updateUserLevelHandler = async (event, context) => {
+  const ctrl = ctrlWrapper(updateUserLevel);
+  return await ctrl(event, context);
+};
 export const removeFromGroupHandler = async (event, context) => {
   const ctrl = ctrlWrapper(removeFromGroup);
   return await ctrl(event, context);

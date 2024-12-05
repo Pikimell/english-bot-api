@@ -1,4 +1,6 @@
+import { botSendMessage } from '../services/telegramServices';
 import { userServices } from '../services/userServices';
+import { USER_MENU } from '../telegram/models/user-keyboard';
 import { response } from '../utils/response'; // Утиліта для уніфікованої відповіді
 
 // Отримати користувача за ID
@@ -30,6 +32,23 @@ export const updateUser = async (event) => {
   if (!updatedUser) {
     return response(404)({ message: 'User not found' });
   }
+
+  return response(200)(updatedUser);
+};
+// Оновити користувача
+export const updateUserLevel = async (event) => {
+  const { id, level } = event.pathParameters;
+  const updatedUser = await userServices.updateUserById(id, { level });
+
+  if (!updatedUser) {
+    return response(404)({ message: 'User not found' });
+  }
+  const message = `<b>Ваш рівень було оновлено</b>
+Вітаю, ви маєте рівень - ${updatedUser.level}`;
+  botSendMessage(updatedUser.userId, message, {
+    reply_markup: { keyboard: USER_MENU.secondScreen },
+    parse_mode: 'HTML',
+  });
 
   return response(200)(updatedUser);
 };

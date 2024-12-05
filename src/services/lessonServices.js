@@ -1,4 +1,4 @@
-import { LessonCollection } from '../db/models/lesson';
+import { LessonCollection } from '../db/models/lesson.js';
 
 export const lessonServices = {
   createLesson: async (data) => {

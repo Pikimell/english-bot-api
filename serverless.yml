@@ -64,6 +64,13 @@ functions:
           path: users/{id}
           method: put
           cors: true
+  updateUserLevel:
+    handler: src/handlers/userHandlers.updateUserLevelHandler
+    events:
+      - http:
+          path: users/{id}/{level}
+          method: put
+          cors: true
 
   # Видалити користувача
   deleteUser:
@@ -340,5 +347,39 @@ functions:
     events:
       - http:
           path: posts/{id}
+          method: delete
+          cors: true
+
+          # !============== Plan Handlers ===============
+
+  createPlan:
+    handler: src/handlers/planHandlers.createPlanHandler
+    events:
+      - http:
+          path: plan
+          method: post
+          cors: true
+
+  getAllPlans:
+    handler: src/handlers/planHandlers.getAllPlansHandler
+    events:
+      - http:
+          path: plan
+          method: get
+          cors: true
+
+  updatePlanById:
+    handler: src/handlers/planHandlers.updatePlanByIdHandler
+    events:
+      - http:
+          path: plan/{id}
+          method: put
+          cors: true
+
+  deletePlanById:
+    handler: src/handlers/planHandlers.deletePlanByIdHandler
+    events:
+      - http:
+          path: plan/{id}
           method: delete
           cors: true

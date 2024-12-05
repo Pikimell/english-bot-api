@@ -14,3 +14,17 @@ export const sendMessage = async (chatId, message, callback) => {
       console.log(err);
     });
 };
+
+export const botSendMessage = async (chatId, message, options, callback) => {
+  const data = {
+    chat_id: chatId,
+    text: message,
+    ...options,
+  };
+  axios
+    .post(`${BASE_URL}/sendMessage`, data)
+    .then(callback)
+    .catch((err) => {
+      console.log(err);
+    });
+};

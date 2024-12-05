@@ -16,6 +16,7 @@ export const telegramHandler = async (event, context) => {
   });
   return await ctrl(event, context);
 };
+
 export const googleFormHandler = async (event, context) => {
   const ctrl = ctrlWrapper((event, context) => {
     const body = event.body;
