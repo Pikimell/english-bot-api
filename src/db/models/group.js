@@ -11,6 +11,7 @@ const groupSchema = new Schema(
     ],
     price: { type: Number, required: true },
     description: { type: String },
+    students: { type: Number, default: 0 },
   },
   { timestamps: true, versionKey: false },
 );

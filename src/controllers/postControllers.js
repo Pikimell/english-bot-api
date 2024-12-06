@@ -18,8 +18,9 @@ export const getPostById = async (event) => {
   return response(200)(post);
 };
 
-export const getAllPosts = async () => {
-  const posts = await postServices.getAllPosts();
+export const getAllPosts = async (event) => {
+  const filters = event.queryStringParameters;
+  const posts = await postServices.getAllPosts(filters);
   return response(200)(posts);
 };
 

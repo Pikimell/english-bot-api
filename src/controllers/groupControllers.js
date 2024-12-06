@@ -18,8 +18,9 @@ export const getGroupById = async (event) => {
   return response(200)(group);
 };
 
-export const getAllGroups = async () => {
-  const groups = await groupServices.getAllGroups();
+export const getAllGroups = async (e) => {
+  const filters = e.queryStringParameters;
+  const groups = await groupServices.getAllGroups(filters);
   return response(200)(groups);
 };
 
