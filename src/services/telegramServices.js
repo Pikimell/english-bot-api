@@ -7,7 +7,7 @@ export const sendMessage = async (chatId, message, callback) => {
     chat_id: chatId,
     text: message,
   };
-  axios
+  return axios
     .post(`${BASE_URL}/sendMessage`, data)
     .then(callback)
     .catch((err) => {
@@ -21,7 +21,7 @@ export const botSendMessage = async (chatId, message, options, callback) => {
     text: message,
     ...options,
   };
-  axios
+  return axios
     .post(`${BASE_URL}/sendMessage`, data)
     .then(callback)
     .catch((err) => {

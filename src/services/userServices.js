@@ -1,9 +1,11 @@
 import { UserCollection } from '../db/models/user.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+import { lessonServices } from './lessonServices.js';
 
 export const userServices = {
   // Створити нового користувача
   async createUser(data) {
+    data.userId = data.userId.toString();
     const user = new UserCollection(data);
     return await user.save();
   },
@@ -146,22 +148,20 @@ export const userServices = {
   },
 
   async getUserBalance(userId) {
-    const userPromise = UserCollection.findOne({ userId });
-    const usersPromise = userServices.getUsersByUser(userId);
-    const promises = [userPromise, usersPromise];
-    const [user, users] = await Promise.all(promises);
+    const userPromise = await UserCollection.findOne({ userId });
+    const lessonsPromise = lessonServices.getLessonsByUser(userId);
+    const promises = [userPromise, lessonsPromise];
+    const [user, lessons] = await Promise.all(promises);
 
-    const totalSpent = users.reduce((sum, el) => {
+    const totalSpent = lessons.reduce((sum, el) => {
       return (sum += el.price);
     }, 0);
-
-    console.log(user);
 
     const result = {
       userId,
       totalSpent,
       totalBalance: user.balance,
-      totalUsers: users.length,
+      totalLessons: lessons.length,
       balance: totalSpent - user.balance,
     };
 

@@ -7,6 +7,7 @@ import {
   deleteGroupById,
   addStudentToGroup,
   removeStudentFromGroup,
+  getScheduleController,
 } from '../controllers/groupControllers.js';
 
 export const createGroupHandler = async (event, context) => {
@@ -41,5 +42,10 @@ export const addStudentToGroupHandler = async (event, context) => {
 
 export const removeStudentFromGroupHandler = async (event, context) => {
   const ctrl = ctrlWrapper(removeStudentFromGroup);
+  return await ctrl(event, context);
+};
+
+export const getScheduleHandler = async (event, context) => {
+  const ctrl = ctrlWrapper(getScheduleController);
   return await ctrl(event, context);
 };

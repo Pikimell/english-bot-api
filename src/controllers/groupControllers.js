@@ -23,6 +23,10 @@ export const getAllGroups = async (e) => {
   const groups = await groupServices.getAllGroups(filters);
   return response(200)(groups);
 };
+export const getScheduleController = async (e) => {
+  const groups = await groupServices.getSchedule();
+  return response(200)(groups);
+};
 
 export const updateGroupById = async (event) => {
   const { id } = event.pathParameters;

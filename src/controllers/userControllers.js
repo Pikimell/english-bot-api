@@ -1,7 +1,7 @@
 import { botSendMessage } from '../services/telegramServices';
 import { userServices } from '../services/userServices';
 import { USER_MENU } from '../telegram/models/user-keyboard';
-import { parseLessonFilterParams } from '../utils/parseFilterParams';
+import { parseUserFilterParams } from '../utils/parseFilterParams';
 import { parsePaginationParams } from '../utils/parsePaginationParams';
 import { parseLessonsSortParams } from '../utils/parseSortParams';
 import { response } from '../utils/response'; // Утиліта для уніфікованої відповіді
@@ -48,7 +48,7 @@ export const updateUserLevel = async (event) => {
   }
   const message = `<b>Ваш рівень було оновлено</b>
 Вітаю, ви маєте рівень - ${updatedUser.level}`;
-  botSendMessage(updatedUser.userId, message, {
+  await botSendMessage(updatedUser.userId, message, {
     reply_markup: { keyboard: USER_MENU.secondScreen },
     parse_mode: 'HTML',
   });
@@ -71,7 +71,7 @@ export const deleteUser = async (event) => {
 // Отримати всіх користувачів
 export const getAllUsers = async (event) => {
   const query = event.queryStringParameters;
-  const filters = parseLessonFilterParams(query);
+  const filters = parseUserFilterParams(query);
   const sort = parseLessonsSortParams(query);
   const pagination = parsePaginationParams(query);
 

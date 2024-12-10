@@ -5,6 +5,19 @@ export const groupServices = {
     const group = new GroupCollection(data);
     return await group.save();
   },
+  getSchedule: async () => {
+    const groups = await GroupCollection.find();
+    const schedule = {};
+
+    for (const group of groups) {
+      for (const item of group.schedule) {
+        const { day, time } = item;
+        schedule[day] = schedule[day] || [];
+        if (!schedule[day].includes(time)) schedule[day].push(time);
+      }
+    }
+    return schedule;
+  },
 
   getGroupById: async (groupId) => {
     return await GroupCollection.findById(groupId);

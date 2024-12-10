@@ -152,6 +152,14 @@ functions:
           method: get
           cors: true
 
+  getGroupSchedule:
+    handler: src/handlers/groupHandlers.getScheduleHandler
+    events:
+      - http:
+          path: groups/schedule
+          method: get
+          cors: true
+
   getAllGroups:
     handler: src/handlers/groupHandlers.getAllGroupsHandler
     events:

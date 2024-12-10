@@ -11,7 +11,7 @@ export const parseUserFilterParams = (query = {}) => {
   const filters = {};
   for (const key of keys) {
     if (query[key] !== undefined) {
-      filters[key] = query = [key];
+      filters[key] = query[key];
     }
   }
 
