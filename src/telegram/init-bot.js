@@ -4,12 +4,21 @@ import { initMainControllers } from './controllers/mainControllers.js';
 import { initPaymentControllers } from './controllers/paymentController.js';
 import { initStudentControllers } from './controllers/studentController.js';
 
-async function initBot() {
+const options = {
+  isActive: false,
+};
+export async function initBot() {
   await initMongoDB();
+  if (options.isActive) {
+    console.log('BOT is Active Already');
+    return;
+  }
   initCommandControllers();
   initStudentControllers();
   initPaymentControllers();
   initMainControllers();
+  console.log('BOT INITIALIZED');
+  options.isActive = true;
 }
 
-initBot();
+// initBot();

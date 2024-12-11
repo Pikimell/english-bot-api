@@ -1,7 +1,9 @@
+import { groupServices } from '../../services/groupServices.js';
 import { getPlanByLevel } from '../../services/planServices.js';
 import { userServices } from '../../services/userServices.js';
 import bot from '../connect.js';
 import { USER_MENU } from '../models/user-keyboard.js';
+import { generateScheduleMessage } from '../services/dialogs.js';
 import { getChatId, sendAdminMessage } from '../services/helpers.js';
 import {
   adminTestLessonMessage,
@@ -39,15 +41,29 @@ async function onBalance(msg) {
 
 async function onSchedule(msg) {
   const chatId = getChatId(msg);
+  const user = await userServices.getUserById(chatId);
+  let message;
+  if (user.groupId === 'null' || !user.groupId) {
+    message = `<b>Ваш розклад наразі недоступний</b> ❌  
+
+Як тільки вас буде додано до групи, ваш розклад автоматично з'явиться тут.  
+
+Дякую за розуміння! 😊`;
+  } else {
+    const group = await groupServices.getGroupById(user.groupId);
+    message = generateScheduleMessage(group.schedule);
+  }
+
+  await bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
 }
 
 async function onPriceList(msg) {
   const chatId = getChatId(msg);
 
   const user = await userServices.getUserById(chatId);
+  const planList = await getPlanByLevel(user.level);
 
-  if (user.level) {
-    const planList = await getPlanByLevel(user.level);
+  if (planList.length > 0) {
     const keyboard = planList.map((el) => {
       return [
         {
@@ -72,6 +88,7 @@ async function onPriceList(msg) {
 }
 
 export function initStudentControllers() {
+  console.log('initStudentControllers');
   bot.onText(TRIGGER.student.testLesson, onTestLesson);
   bot.onText(TRIGGER.student.checkLevel, onCheckLevel);
   bot.onText(TRIGGER.student.balance, onBalance);

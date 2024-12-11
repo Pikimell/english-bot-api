@@ -111,3 +111,17 @@ export async function getMessage(
     });
   });
 }
+
+export function generateScheduleMessage(schedule) {
+  if (!schedule || schedule.length === 0) {
+    return '<b>Ваш розклад наразі відсутній</b> ❌\nБудь ласка, зверніться до адміністратора.';
+  }
+
+  let message = '<b>Ваш розклад:</b>\n\n';
+
+  schedule.forEach((entry) => {
+    message += `• <b>${entry.day}</b> о <b>${entry.time}</b>\n`;
+  });
+
+  return message;
+}

@@ -1,4 +1,4 @@
-import { GroupCollection } from '../db/models/group';
+import { GroupCollection } from '../db/models/group.js';
 
 export const groupServices = {
   createGroup: async (data) => {

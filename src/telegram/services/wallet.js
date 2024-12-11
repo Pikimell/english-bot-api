@@ -60,18 +60,3 @@ export async function getPayLink({
     console.log(err);
   }
 }
-
-/* 
-{
-  id: '2d5d0b50-07e3-4584-9d3d-90d02d9a7a03',
-  userId: 433982686,
-  name: 'Volodymyr',
-  phoneNumber: '380996196534',
-  address: 'In store',
-  price: 2000,
-  type: 'order',
-  products: [ '666dd875e3a0b68edce63e9f' ],
-  initDate: '16.06.2024 17:38',
-  isActive: true
-}
-*/

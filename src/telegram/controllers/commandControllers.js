@@ -38,5 +38,7 @@ async function onStart(msg) {
 }
 
 export function initCommandControllers() {
+  console.log('initCommandControllers');
+
   bot.onText(/\/start/, onStart);
 }

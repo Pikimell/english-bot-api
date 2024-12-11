@@ -5,7 +5,7 @@ import { parseJson } from '../middleware/jsonBody.js';
 export const ctrlWrapper = (controller, ...middleware) => {
   return async (event, context) => {
     try {
-      initMongoDB();
+      await initMongoDB();
 
       parseJson(event);
 

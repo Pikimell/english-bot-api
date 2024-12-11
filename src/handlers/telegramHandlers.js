@@ -3,17 +3,23 @@ import telegramBot from '../telegram/connect.js';
 import { response } from '../utils/response.js';
 import { ADMINS, TELEGRAM_TOKEN } from '../helpers/constants.js';
 import { sendMessage } from '../services/telegramServices.js';
+import { initBot } from '../telegram/init-bot.js';
 
 export const telegramHandler = async (event, context) => {
-  const ctrl = ctrlWrapper((event, context) => {
-    const { token } = event.pathParams;
+  const ctrl = ctrlWrapper(async (event, context) => {
     const body = event.body;
+
+    const { token } = event.pathParameters;
+
     if (token === TELEGRAM_TOKEN) {
-      console.log(body);
       telegramBot.processUpdate(body);
+      await telegramBot.getWebHookInfo();
     }
-    return response(200)(body);
-  });
+    return response(200)({
+      ok: true,
+      result: true,
+    });
+  }, initBot);
   return await ctrl(event, context);
 };
 

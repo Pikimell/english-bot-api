@@ -36,7 +36,7 @@ export function adminTestLessonMessage({ userId, username, first_name }) {
 }
 
 export function userBalance(userBalance) {
-  const { totalSpent, totalBalance, totalLessons, balance } = userBalance;
+  const { totalSpent, totalLessons, balance } = userBalance;
   const message = `<b>Ваш баланс:</b>
 💰 <b>Поточний баланс:</b> ${balance}грн
 📚 <b>Кількість уроків:</b> ${totalLessons}

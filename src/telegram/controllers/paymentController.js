@@ -84,6 +84,8 @@ async function onUserPaid(query) {
 }
 
 export function initPaymentControllers() {
+  console.log('initPaymentControllers');
+
   bot.on('callback_query', onSelectPlan);
   bot.on('callback_query', onSelectLessons);
   bot.on('successful_payment', onUserPaid);
@@ -99,7 +101,7 @@ async function telegramPay({ chatId, prices, plan, totalPrice, count }) {
 }
 async function tonWalletPay({ chatId, prices, plan, totalPrice, count }) {
   const { res, status } = await getPayLink({ userId: chatId });
-  console.log(res);
+  console.log(res, status);
 
   bot.sendMessage(chatId, 'Оплата пакету послуг', {
     reply_markup: {
