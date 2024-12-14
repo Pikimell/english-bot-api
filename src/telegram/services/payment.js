@@ -23,7 +23,7 @@ export async function sendInvoice(prices, info) {
     title: 'Оплата пакету послуг',
     desc: 'Після оплати вам буде надіслано чек а баланс буде оновлено',
     payload: `${info.chatId}`,
-    token: PAYMENT.UNLIMIT,
+    token: PAYMENT.PORTMONE,
     currency: 'UAH',
     prices,
     data: info,

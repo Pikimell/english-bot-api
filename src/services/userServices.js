@@ -162,10 +162,25 @@ export const userServices = {
       totalSpent,
       totalBalance: user.balance,
       totalLessons: lessons.length,
-      balance: totalSpent - user.balance,
+      balance: user.balance - totalSpent,
     };
 
     console.log(result);
     return result;
+  },
+
+  async incrementBalance(userId, amount) {
+    try {
+      const user = await userServices.getUserById(userId);
+      user.balance = user.balance || 0;
+
+      const res = await userServices.updateBalance(
+        userId,
+        +user.balance + +amount,
+      );
+      return res;
+    } catch (error) {
+      throw new Error(`Error updating user balance: ${error.message}`);
+    }
   },
 };

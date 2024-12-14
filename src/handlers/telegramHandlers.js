@@ -4,6 +4,7 @@ import { response } from '../utils/response.js';
 import { ADMINS, TELEGRAM_TOKEN } from '../helpers/constants.js';
 import { sendMessage } from '../services/telegramServices.js';
 import { initBot } from '../telegram/init-bot.js';
+import { sleep } from '../utils/delay.js';
 
 export const telegramHandler = async (event, context) => {
   const ctrl = ctrlWrapper(async (event, context) => {
@@ -13,7 +14,7 @@ export const telegramHandler = async (event, context) => {
 
     if (token === TELEGRAM_TOKEN) {
       telegramBot.processUpdate(body);
-      await telegramBot.getWebHookInfo();
+      await sleep(500);
     }
     return response(200)({
       ok: true,

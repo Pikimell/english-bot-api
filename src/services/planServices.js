@@ -1,3 +1,4 @@
+import { GroupCollection } from '../db/models/group.js';
 import { PlanCollection } from '../db/models/plan.js';
 
 // Create a new plan
@@ -19,7 +20,14 @@ export const getPlanByLevel = async (level) => {
   }
   return plan;
 };
-// Read (get) a single plan
+
+export const getPlanByGroup = async (groupId) => {
+  const group = await GroupCollection.findOne(groupId);
+
+  if (!group) {
+    throw new Error('Plan not found');
+  }
+};
 export const getPlanById = async (id) => {
   const plan = await PlanCollection.findById(id);
   if (!plan) {

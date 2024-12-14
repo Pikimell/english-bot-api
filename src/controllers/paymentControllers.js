@@ -1,4 +1,7 @@
+import { ADMINS } from '../helpers/constants';
 import { paymentServices } from '../services/paymentServices';
+import { sendMessage, sendMessagePayment } from '../services/telegramServices';
+import { userServices } from '../services/userServices';
 import { response } from '../utils/response';
 
 export const createPayment = async (event) => {
@@ -45,4 +48,25 @@ export const deletePaymentById = async (event) => {
   }
 
   return response(200)({ message: 'Payment deleted successfully' });
+};
+
+export const notificationController = async (event, context) => {
+  try {
+    const { status, amount } = event.body;
+    const { userId } = event.queryStringParameters;
+
+    if (status !== 'success') {
+      return response(204)(null);
+    }
+
+    const p1 = userServices.incrementBalance(userId, amount / 100);
+    const p2 = sendMessagePayment(userId, amount / 100);
+    const [res] = await Promise.all([p1, p2]);
+
+    return response(200)(res);
+  } catch (err) {
+    sendMessage(ADMINS[0], 'ERROR PAYMENT, but PAID');
+  }
+
+  return response(200)(null);
 };

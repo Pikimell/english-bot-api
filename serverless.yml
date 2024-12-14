@@ -17,6 +17,22 @@ provider:
   timeout: 20
 
 functions:
+  # !============ PAYMENT Handlers ===============
+  notification:
+    handler: src/handlers/notificationHandler.notificationHandler
+    events:
+      - http:
+          path: notification
+          method: post
+          cors: true
+
+  notificationTest:
+    handler: src/handlers/notificationHandler.notificationTestHandler
+    events:
+      - http:
+          path: notification
+          method: get
+          cors: true
   # !============ Telegram Handlers ===============
 
   telegramHook:

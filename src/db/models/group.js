@@ -5,6 +5,7 @@ const groupSchema = new Schema(
     level: { type: String, required: true },
     schedule: [
       {
+        id: { type: String, required: true },
         day: { type: String, required: true },
         time: { type: String, required: true },
       },

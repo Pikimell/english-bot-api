@@ -28,12 +28,16 @@ export const groupServices = {
   },
 
   updateGroupById: async (groupId, updateData) => {
+    if (updateData.students && updateData.students < 0) {
+      updateData.students = 0;
+    }
     return await GroupCollection.findByIdAndUpdate(groupId, updateData, {
       new: true,
     });
   },
 
   deleteGroupById: async (groupId) => {
+    // TODO delete group for students
     return await GroupCollection.findByIdAndDelete(groupId);
   },
 };
