@@ -36,15 +36,15 @@ const monoApi = axios.create({
   },
 });
 
-export async function createPayment(invoice) {
-  const { amount, userId, lessonId = '' } = invoice;
-  const params = new URLSearchParams({ userId, lessonId });
+export async function createPaymentUrl(invoice) {
+  const { amount, userId } = invoice;
+  const params = new URLSearchParams({ userId });
   const url = 'https://api.monobank.ua/api/merchant/invoice/create';
 
   const data = {
     amount,
-    redirectUrl: `https://booking-ui-murex.vercel.app/lessons`,
-    webHookUrl: `https://qn42ohkgqf.execute-api.us-east-2.amazonaws.com/dev/notification?${params}`,
+    redirectUrl: `https://main.dh94uy1nr9p88.amplifyapp.com/`,
+    webHookUrl: `https://hg5yk1jxxc.execute-api.us-east-2.amazonaws.com/dev/notification?${params}`,
   };
 
   const res = await monoApi.post(url, data);

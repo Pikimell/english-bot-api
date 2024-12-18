@@ -16,7 +16,6 @@ async function onStart(msg) {
     },
   };
   const oldUser = await userServices.getUserById(user.userId);
-  console.log(oldUser);
 
   if (!oldUser) {
     userServices.createUser(user).catch(() => {});
@@ -27,7 +26,7 @@ async function onStart(msg) {
     });
     sendAdminMessage(newUserMessage(user));
   } else {
-    const keyboard = user.level
+    const keyboard = oldUser.level
       ? USER_MENU.secondScreen
       : USER_MENU.firstScreen;
 

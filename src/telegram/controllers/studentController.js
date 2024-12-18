@@ -1,4 +1,5 @@
 import { groupServices } from '../../services/groupServices.js';
+import { getPlanByLevel } from '../../services/planServices.js';
 import { userServices } from '../../services/userServices.js';
 import bot from '../connect.js';
 import { USER_MENU } from '../models/user-keyboard.js';
@@ -10,7 +11,6 @@ import {
   userBalance,
 } from '../services/messages.js';
 import { TRIGGER } from '../services/trigger.js';
-import { onSelectPlan } from './paymentController.js';
 
 async function onTestLesson(msg) {
   const chatId = getChatId(msg);
@@ -61,13 +61,28 @@ async function onPriceList(msg) {
   const chatId = getChatId(msg);
 
   const user = await userServices.getUserById(chatId);
-  if (user.groupId && user.groupId != 'null') {
-    onSelectPlan(msg, user.groupId);
+  const planList = await getPlanByLevel(user.level);
+
+  if (planList.length > 0) {
+    const keyboard = planList.map((el) => {
+      return [
+        {
+          text: `${el.title} - ${el.price} грн`,
+          callback_data: `pay/plan/${el._id}`,
+        },
+      ];
+    });
+    bot.sendMessage(chatId, 'Оберіть варіант:', {
+      reply_markup: {
+        inline_keyboard: keyboard,
+      },
+    });
   } else {
     const message = `
     <b>Оплата послуг наразі недоступна</b>.
 📌 Щойно оплата стане доступною - вам буде надіслане сповіщення!`;
 
+    // bot.sendMessage(ADMINS[0], '', { parse_mode: 'HTML' });// TODO надіслати повідомлення адміну що користувач хоче зробити оплату
     bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
   }
 }
