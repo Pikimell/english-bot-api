@@ -65,9 +65,7 @@ export const notificationController = async (event, context) => {
 
     const p1 = userServices.incrementBalance(userId, amount / 100);
     const p2 = sendMessagePayment(userId, amount / 100);
-    const [res] = await Promise.all([p1, p2]).catch((err) => {
-      console.log(err);
-    });
+    const [res] = await Promise.all([p1, p2]);
 
     return response(200)(res);
   } catch (err) {
