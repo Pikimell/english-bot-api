@@ -7,7 +7,6 @@ import { lessonServices } from '../../services/lessonServices.js';
 
 const onTodayList = async (msg) => {
   const chatId = getChatId(msg);
-  console.log(chatId);
 
   if (!isAdmin(chatId)) return;
   const groups = await groupServices.getTodayGroup();

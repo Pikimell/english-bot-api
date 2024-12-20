@@ -6,7 +6,6 @@ import { response } from '../utils/response';
 
 export const createPayment = async (event) => {
   const data = event.body;
-  console.log(data);
 
   const newPayment = await createPaymentUrl(data);
   return response(201)(newPayment);
@@ -54,10 +53,8 @@ export const deletePaymentById = async (event) => {
 
 export const notificationController = async (event, context) => {
   try {
-    console.log('HELLO PAYMENT');
     const { status, amount } = event.body;
     const { userId } = event.queryStringParameters;
-    console.log(status, amount, userId);
 
     if (status !== 'success') {
       return response(204)(null);

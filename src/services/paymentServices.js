@@ -44,7 +44,7 @@ export async function createPaymentUrl(invoice) {
   const data = {
     amount,
     redirectUrl: `https://main.dh94uy1nr9p88.amplifyapp.com/`,
-    webHookUrl: `https://hg5yk1jxxc.execute-api.us-east-2.amazonaws.com/dev/notification?${params}`,
+    webHookUrl: `https://ab7dxlro9f.execute-api.us-east-2.amazonaws.com/dev/notification?${params}`,
   };
 
   const res = await monoApi.post(url, data);

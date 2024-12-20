@@ -165,7 +165,6 @@ export const userServices = {
       balance: user.balance - totalSpent,
     };
 
-    console.log(result);
     return result;
   },
 

@@ -61,8 +61,6 @@ export async function telegramTickController() {
 }
 
 async function sendReminder(groupId, info) {
-  console.log(info);
-
   const userMessage = `<b>НАГАДУВАННЯ</b>
 Через годинку заплановано зустріч. 
 Посилання буде надіслано автоматично у цей чат!`;
