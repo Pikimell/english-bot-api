@@ -70,3 +70,14 @@ export const deleteLessonById = async (event) => {
 
   return response(200)({ message: 'Lesson deleted successfully' });
 };
+
+export const deleteLessonByUser = async (event) => {
+  const { userId } = event.pathParameters;
+  const deletedLesson = await lessonServices.deleteLessonByUser(userId);
+
+  if (!deletedLesson) {
+    return response(404)({ message: 'Lesson not found' });
+  }
+
+  return response(200)({ message: 'Lesson deleted successfully' });
+};

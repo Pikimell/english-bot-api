@@ -40,4 +40,42 @@ export const groupServices = {
     // TODO delete group for students
     return await GroupCollection.findByIdAndDelete(groupId);
   },
+
+  getTodayGroup: async () => {
+    const days = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    const dayIndex = new Date().getDay();
+    const currentDay = days[dayIndex];
+
+    try {
+      const groups = await GroupCollection.find({
+        'schedule.day': currentDay,
+      });
+
+      const todayGroups = groups
+        .map((group) => {
+          const todaySchedule = group.schedule.filter(
+            (item) => item.day === currentDay,
+          );
+          return todaySchedule.length > 0
+            ? {
+                _id: group._id,
+                level: group.level,
+                price: group.price,
+                description: group.description,
+                students: group.students,
+                lesson: todaySchedule[0],
+              }
+            : null;
+        })
+        .filter((group) => group !== null)
+        .sort((a, b) => {
+          return parseInt(a.lesson.time) - parseInt(b.lesson.time);
+        });
+
+      return todayGroups;
+    } catch (error) {
+      console.error('Error fetching today groups:', error);
+      throw new Error('Failed to fetch today groups');
+    }
+  },
 };

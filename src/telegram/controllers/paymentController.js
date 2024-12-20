@@ -1,3 +1,4 @@
+import { observer } from '../../helpers/observer.js';
 import { createPaymentUrl } from '../../services/paymentServices.js';
 import { getPlanById } from '../../services/planServices.js';
 import bot from '../connect.js';
@@ -32,6 +33,7 @@ async function onSelectPlan(query) {
     },
   });
   deleteMsg(chatId, query.message.message_id);
+  observer.resolve();
 }
 
 async function onSelectLessons(query) {
@@ -52,8 +54,9 @@ async function onSelectLessons(query) {
     count = Number(count) || 1;
   }
 
-  selectPaymentMethod({ chatId, plan, count });
   deleteMsg(chatId, query.message.message_id);
+  await selectPaymentMethod({ chatId, plan, count });
+  observer.resolve();
 }
 
 async function selectPaymentMethod({ chatId, plan, count }) {
@@ -69,17 +72,18 @@ async function selectPaymentMethod({ chatId, plan, count }) {
   const method = await paymentDialog(chatId);
   switch (method) {
     case 'mono':
-      monoPay(data);
+      await monoPay(data);
       break;
     case 'TRC20':
       break;
     case 'portmone':
-      telegramPay(data);
+      await telegramPay(data);
       break;
     case 'wallet':
-      tonWalletPay(data);
+      await tonWalletPay(data);
       break;
   }
+  observer.resolve();
 }
 
 async function onUserPaid(query) {
@@ -99,13 +103,14 @@ async function monoPay({ chatId, totalPrice }) {
     userId: chatId,
     amount: totalPrice,
   });
-  bot.sendMessage(chatId, 'Виконайте оплату:', {
+  await bot.sendMessage(chatId, 'Виконайте оплату:', {
     reply_markup: {
       inline_keyboard: [
         [{ text: `Apple Pay (${totalPrice / 100}грн)`, url: data.pageUrl }],
       ],
     },
   });
+  observer.resolve();
 }
 
 async function telegramPay({ chatId, prices, totalPrice, count }) {

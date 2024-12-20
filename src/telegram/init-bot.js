@@ -3,6 +3,7 @@ import { initCommandControllers } from './controllers/commandControllers.js';
 import { initMainControllers } from './controllers/mainControllers.js';
 import { initPaymentControllers } from './controllers/paymentController.js';
 import { initStudentControllers } from './controllers/studentController.js';
+import { initTeacherControllers } from './controllers/teacherController.js';
 
 const options = {
   isActive: false,
@@ -15,10 +16,10 @@ export async function initBot() {
   }
   initCommandControllers();
   initStudentControllers();
+  initTeacherControllers();
   initPaymentControllers();
   initMainControllers();
-  console.log('BOT INITIALIZED');
   options.isActive = true;
 }
 
-// initBot();
+initBot();

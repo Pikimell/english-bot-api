@@ -6,7 +6,9 @@ export const TRIGGER = {
     schedule: 'Мій Розклад',
     priceList: 'Оплата пакету послуг',
   },
-  teacher: {},
+  teacher: {
+    today: '/today',
+  },
   common: {
     start: '/start',
   },

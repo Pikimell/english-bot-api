@@ -1,5 +1,6 @@
 import { deleteMsg, getChatId } from './helpers.js';
 import bot from '../connect.js';
+import { TIME_ZONE } from '../../helpers/constants.js';
 
 export async function paymentDialog(chatId) {
   return new Promise((resolve, reject) => {
@@ -121,7 +122,9 @@ export function generateScheduleMessage(schedule) {
   let message = '<b>Ваш розклад:</b>\n\n';
 
   schedule.forEach((entry) => {
-    message += `• <b>${entry.day}</b> о <b>${entry.time}</b>\n`;
+    message += `• <b>${entry.day}</b> о <b>${
+      parseInt(entry.time) + TIME_ZONE
+    }:00</b>\n`;
   });
 
   return message;

@@ -59,4 +59,29 @@ export const lessonServices = {
   deleteLessonById: async (lessonId) => {
     return await LessonCollection.findByIdAndDelete(lessonId);
   },
+
+  deleteLessonByUser: async (userId) => {
+    try {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const todayEnd = new Date();
+      todayEnd.setHours(23, 59, 59, 999);
+
+      const result = await LessonCollection.findOneAndDelete({
+        userId: userId,
+        dateTime: { $gte: todayStart, $lte: todayEnd },
+      });
+
+      if (!result) {
+        console.log('Урок не знайдено для вказаного користувача.');
+        return null;
+      }
+
+      console.log('Урок успішно видалено:', result);
+      return result;
+    } catch (error) {
+      console.error('Помилка при видаленні уроку:', error);
+      throw error;
+    }
+  },
 };

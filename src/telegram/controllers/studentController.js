@@ -1,3 +1,4 @@
+import { observer } from '../../helpers/observer.js';
 import { groupServices } from '../../services/groupServices.js';
 import { getPlanByLevel } from '../../services/planServices.js';
 import { userServices } from '../../services/userServices.js';
@@ -21,6 +22,7 @@ async function onTestLesson(msg) {
   };
   bot.sendMessage(chatId, testLessonMessage(), { parse_mode: 'HTML' });
   sendAdminMessage(adminTestLessonMessage(user));
+  observer.resolve();
 }
 
 async function onCheckLevel(msg) {
@@ -30,6 +32,7 @@ async function onCheckLevel(msg) {
       inline_keyboard: USER_MENU.testList,
     },
   });
+  observer.resolve();
 }
 
 async function onBalance(msg) {
@@ -37,6 +40,7 @@ async function onBalance(msg) {
   const balance = await userServices.getUserBalance(chatId);
   const message = userBalance(balance);
   bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+  observer.resolve();
 }
 
 async function onSchedule(msg) {
@@ -55,6 +59,7 @@ async function onSchedule(msg) {
   }
 
   await bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+  observer.resolve();
 }
 
 async function onPriceList(msg) {
@@ -72,7 +77,7 @@ async function onPriceList(msg) {
         },
       ];
     });
-    bot.sendMessage(chatId, 'Оберіть варіант:', {
+    await bot.sendMessage(chatId, 'Оберіть варіант:', {
       reply_markup: {
         inline_keyboard: keyboard,
       },
@@ -83,8 +88,9 @@ async function onPriceList(msg) {
 📌 Щойно оплата стане доступною - вам буде надіслане сповіщення!`;
 
     // bot.sendMessage(ADMINS[0], '', { parse_mode: 'HTML' });// TODO надіслати повідомлення адміну що користувач хоче зробити оплату
-    bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+    await bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
   }
+  observer.resolve();
 }
 
 export function initStudentControllers() {

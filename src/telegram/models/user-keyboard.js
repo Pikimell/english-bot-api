@@ -27,3 +27,4 @@ export const USER_MENU = {
     ],
   ],
 };
+export const lessonUsersMenu = (users) => {};

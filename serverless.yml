@@ -42,6 +42,20 @@ functions:
           path: /telegramHook/{token}
           method: post
           cors: true
+  telegramTick:
+    handler: src/handlers/telegramHandlers.telegramTickHandler
+    events:
+      - http:
+          path: /telegram/tick
+          method: get
+          cors: true
+  telegramMessage:
+    handler: src/handlers/telegramHandlers.telegramMessageHandler
+    events:
+      - http:
+          path: /telegram/message
+          method: post
+          cors: true
 
   # !============ Google Form Handlers ===============
 
@@ -271,6 +285,13 @@ functions:
     events:
       - http:
           path: lessons/{id}
+          method: delete
+          cors: true
+  deleteLessonByUser:
+    handler: src/handlers/lessonHandlers.deleteLessonByUserHandler
+    events:
+      - http:
+          path: lessons/user/{userId}
           method: delete
           cors: true
 

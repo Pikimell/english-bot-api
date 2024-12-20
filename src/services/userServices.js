@@ -16,7 +16,7 @@ export const userServices = {
   },
 
   // Отримати всіх користувачів
-  async getAllUsers({ filters, sort, pagination }) {
+  async getAllUsers({ filters, sort = {}, pagination = {} }) {
     const { page = 1, perPage = 10 } = pagination;
 
     const { sortBy = 'createdAt', sortOrder = 'asc' } = sort;
@@ -174,10 +174,7 @@ export const userServices = {
       const user = await userServices.getUserById(userId);
       user.balance = user.balance || 0;
 
-      const res = await userServices.updateBalance(
-        userId,
-        +user.balance + +amount,
-      );
+      const res = await userServices.updateBalance(userId, +amount);
       return res;
     } catch (error) {
       throw new Error(`Error updating user balance: ${error.message}`);

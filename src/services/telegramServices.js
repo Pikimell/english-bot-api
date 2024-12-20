@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { ADMINS, TELEGRAM_TOKEN } from '../helpers/constants';
+import { ADMINS, TELEGRAM_TOKEN, TIME_ZONE } from '../helpers/constants';
 import { userServices } from './userServices';
 import { paymentServices } from './paymentServices';
+import { groupServices } from './groupServices';
 const BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 
 export const sendMessage = async (chatId, message, callback) => {
@@ -46,4 +47,50 @@ id: ${userId}`;
   paymentServices.createPayment({ userId, amount, method: 'MONOBANK' });
   botSendMessage(userId, message);
   botSendMessage(ADMINS[0], message2);
+}
+
+export async function telegramTickController() {
+  const date = new Date();
+  const hours = date.getUTCHours();
+  const groups = await groupServices.getTodayGroup();
+  for (const group of groups) {
+    if (hours + 1 === parseInt(group.lesson.time)) {
+      await sendReminder(group._id, group);
+    }
+  }
+}
+
+async function sendReminder(groupId, info) {
+  console.log(info);
+
+  const userMessage = `<b>НАГАДУВАННЯ</b>
+Через годинку заплановано зустріч. 
+Посилання буде надіслано автоматично у цей чат!`;
+
+  const res = await userServices.getAllUsers({ filters: { groupId } });
+  const users = res.data;
+  for (const user of users) {
+    await botSendMessage(user.userId, userMessage, { parse_mode: 'HTML' });
+  }
+  const studentList = users.map((el) => el.contactInfo.first_name).join(', ');
+  const adminMessage = `<b>НАГАДУВАННЯ</b>
+Рівень: ${info.level}
+Початок: ${parseInt(info.lesson.time) + TIME_ZONE}:00
+Учні: ${studentList};`;
+
+  for (const admin of ADMINS) {
+    await botSendMessage(admin, adminMessage, {
+      parse_mode: 'HTML',
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: 'Надіслати посилання на Zoom',
+              callback_data: `sendRemainder/${groupId}`,
+            },
+          ],
+        ],
+      },
+    });
+  }
 }

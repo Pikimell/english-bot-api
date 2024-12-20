@@ -7,6 +7,7 @@ import {
   getLessonsByUser,
   updateLessonById,
   deleteLessonById,
+  deleteLessonByUser,
 } from '../controllers/lessonControllers.js';
 
 export const createLessonHandler = async (event, context) => {
@@ -41,5 +42,9 @@ export const updateLessonByIdHandler = async (event, context) => {
 
 export const deleteLessonByIdHandler = async (event, context) => {
   const ctrl = ctrlWrapper(deleteLessonById);
+  return await ctrl(event, context);
+};
+export const deleteLessonByUserHandler = async (event, context) => {
+  const ctrl = ctrlWrapper(deleteLessonByUser);
   return await ctrl(event, context);
 };
