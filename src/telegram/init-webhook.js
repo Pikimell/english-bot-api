@@ -1,5 +1,5 @@
-import telegramBot from './connect.js';
-import { SERVER_URL, TELEGRAM_TOKEN } from '../helpers/constants.js';
+// import telegramBot from './connect.js';
+// import { SERVER_URL, TELEGRAM_TOKEN } from '../helpers/constants.js';
 // const webhookUrl = SERVER_URL;
 
 // telegramBot

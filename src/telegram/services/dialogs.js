@@ -7,11 +7,11 @@ export async function paymentDialog(chatId) {
     bot.sendMessage(chatId, 'Оберіть спосіб оплати', {
       reply_markup: {
         inline_keyboard: [
-          [{ text: 'ApplePay', callback_data: 'paymentMethod_mono' }],
-          [{ text: 'Portmone', callback_data: 'paymentMethod_portmone' }],
-          [{ text: 'Ton Wallet', callback_data: 'paymentMethod_wallet' }],
+          [{ text: 'Monobank', callback_data: 'paymentMethod_mono' }],
+          [{ text: 'Переказ на карту', callback_data: 'paymentMethod_cash' }],
+          // [{ text: 'Portmone', callback_data: 'paymentMethod_portmone' }],
+          // [{ text: 'Ton Wallet', callback_data: 'paymentMethod_wallet' }],
           [{ text: 'TRC20', callback_data: 'paymentMethod_TRC20' }],
-          [{ text: 'Monobank', callback_data: 'paymentMethod_MONO' }],
         ],
       },
     });

@@ -33,14 +33,17 @@ export const updateUser = async (event) => {
   const { id } = event.pathParameters;
   const updateData = event.body;
 
-  const updatedUser = await userServices.updateUserById(id, updateData);
+  const oldUser = await userServices.updateUserById(id, updateData);
 
-  if (!updatedUser) {
+  if (!oldUser) {
     return response(404)({ message: 'User not found' });
   }
+  const updatedUser = { ...oldUser._doc, ...updateData };
 
-  if (updatedUser.balance > updateData.balance) {
-    const amount = (updatedUser.balance - updateData.balance) / 100;
+  console.log(updatedUser, oldUser);
+
+  if (updatedUser.balance > oldUser.balance) {
+    const amount = updatedUser.balance - oldUser.balance;
     sendMessagePayment(updatedUser.userId, amount, {
       sendUser: false,
       method: 'Cash',

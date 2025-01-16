@@ -1,3 +1,4 @@
+import { ADMINS } from '../../helpers/constants.js';
 import { observer } from '../../helpers/observer.js';
 import { createPaymentUrl } from '../../services/paymentServices.js';
 import { getPlanById } from '../../services/planServices.js';
@@ -74,6 +75,9 @@ async function selectPaymentMethod({ chatId, plan, count }) {
     case 'mono':
       await monoPay(data);
       break;
+    case 'cash':
+      await cashPay(data);
+      break;
     case 'TRC20':
       break;
     case 'portmone':
@@ -113,6 +117,24 @@ async function monoPay({ chatId, totalPrice }) {
   observer.resolve();
 }
 
+async function cashPay({ chatId, totalPrice }) {
+  const baseUrl = 'https://send.monobank.ua/jar/57jsqghQxo';
+  const url = `${baseUrl}?amount=${totalPrice / 100}&comment=${chatId}`;
+  await bot.sendMessage(chatId, 'Виконайте оплату:', {
+    reply_markup: {
+      inline_keyboard: [[{ text: `MonoBank (${totalPrice / 100}грн)`, url }]],
+    },
+  });
+
+  for (const admin of ADMINS) {
+    await bot.sendMessage(
+      admin,
+      `${chatId} виконує оплату переказом на карту!`,
+    );
+  }
+
+  observer.resolve();
+}
 async function telegramPay({ chatId, prices, totalPrice, count }) {
   sendInvoice(prices, {
     chatId,
