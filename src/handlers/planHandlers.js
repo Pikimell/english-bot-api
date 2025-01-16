@@ -2,6 +2,7 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   createPlan,
   getAllPlans,
+  getPlanById,
   updatePlanById,
   deletePlanById,
 } from '../controllers/planControllers.js';
@@ -13,6 +14,10 @@ export const createPlanHandler = async (event, context) => {
 
 export const getAllPlansHandler = async (event, context) => {
   const ctrl = ctrlWrapper(getAllPlans);
+  return await ctrl(event, context);
+};
+export const getPlanByIdHandler = async (event, context) => {
+  const ctrl = ctrlWrapper(getPlanById);
   return await ctrl(event, context);
 };
 

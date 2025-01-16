@@ -26,7 +26,7 @@ async function onSendRemainder(query) {
   const chatId = getChatId(query);
   if (!isAdmin(chatId)) return;
   const group = await groupServices.getGroupById(groupId);
-  const response = await userServices.getAllUsers({ groupId });
+  const response = await userServices.getAllUsers({ filters: { groupId } });
   const students = response.data;
 
   const promises = [];
@@ -37,21 +37,21 @@ async function onSendRemainder(query) {
       price: group.price,
       dateTime: new Date(),
     });
-    promise.push(promise);
+    promises.push(promise);
   }
 
   for (const { userId } of students) {
-    const message = `**Welcome😉**
+    const message = `***Welcome😉***
   
 Посилання на заняття: 
 https://us02web.zoom.us/j/5195311855?pwd=b3dNWUNLRGF5Z0ZjOHdJcHNiTGgxUT09`;
     const promise = bot.sendMessage(userId, message, {
-      parse_mode: 'MarkdownV2',
+      parse_mode: 'Markdown',
     });
     promises.push(promise);
   }
 
-  await Promise.all(promises);
+  await Promise.all(promises).catch(() => {});
   deleteMsg(chatId, query.message.message_id);
 }
 

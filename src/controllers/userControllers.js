@@ -1,4 +1,7 @@
-import { botSendMessage } from '../services/telegramServices';
+import {
+  botSendMessage,
+  sendMessagePayment,
+} from '../services/telegramServices';
 import { userServices } from '../services/userServices';
 import { USER_MENU } from '../telegram/models/user-keyboard';
 import { parseUserFilterParams } from '../utils/parseFilterParams';
@@ -34,6 +37,14 @@ export const updateUser = async (event) => {
 
   if (!updatedUser) {
     return response(404)({ message: 'User not found' });
+  }
+
+  if (updatedUser.balance > updateData.balance) {
+    const amount = (updatedUser.balance - updateData.balance) / 100;
+    sendMessagePayment(updatedUser.userId, amount, {
+      sendUser: false,
+      method: 'Cash',
+    });
   }
 
   return response(200)(updatedUser);

@@ -1,6 +1,7 @@
 import {
   createPlan as createPlanS,
   getAllPlans as getAllPlansS,
+  getPlanById as getPlanByIdS,
   updatePlanById as updatePlanByIdS,
   deletePlanById as deletePlanByIdS,
 } from '../services/planServices';
@@ -14,6 +15,11 @@ export const createPlan = async (event) => {
 
 export const getAllPlans = async () => {
   const plans = await getAllPlansS();
+  return response(200)(plans);
+};
+export const getPlanById = async (event) => {
+  const { id } = event.pathParameters;
+  const plans = await getPlanByIdS(id);
   return response(200)(plans);
 };
 

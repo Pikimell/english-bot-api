@@ -405,6 +405,13 @@ functions:
           method: post
           cors: true
 
+  getPlanById:
+    handler: src/handlers/planHandlers.getPlanByIdHandler
+    events:
+      - http:
+          path: plan/{id}
+          method: get
+          cors: true
   getAllPlans:
     handler: src/handlers/planHandlers.getAllPlansHandler
     events:

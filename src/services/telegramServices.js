@@ -32,7 +32,8 @@ export const botSendMessage = async (chatId, message, options, callback) => {
     });
 };
 
-export async function sendMessagePayment(userId, amount) {
+export async function sendMessagePayment(userId, amount, options = {}) {
+  const { sendUser = true, sendAdmin = true, method = 'MONOBANK' } = options;
   const user = await userServices.getUserById(userId);
 
   const message =
@@ -44,9 +45,9 @@ export async function sendMessagePayment(userId, amount) {
 Вартість: ${amount}
 id: ${userId}`;
 
-  paymentServices.createPayment({ userId, amount, method: 'MONOBANK' });
-  botSendMessage(userId, message);
-  botSendMessage(ADMINS[0], message2);
+  paymentServices.createPayment({ userId, amount, method });
+  if (sendUser) botSendMessage(userId, message);
+  if (sendAdmin) botSendMessage(ADMINS[0], message2);
 }
 
 export async function telegramTickController() {
