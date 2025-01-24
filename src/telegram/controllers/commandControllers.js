@@ -22,7 +22,16 @@ async function onStart(msg) {
     userServices.createUser(user).catch(() => {});
     await bot.sendMessage(chatId, FIRST_MESSAGE, {
       reply_markup: {
-        keyboard: USER_MENU.firstScreen,
+        keyboard: [
+          [
+            {
+              text: 'Поділитися контактом',
+              request_contact: true,
+            },
+          ],
+        ],
+        resize_keyboard: true,
+        one_time_keyboard: true,
       },
     });
     sendAdminMessage(newUserMessage(user));
@@ -39,8 +48,23 @@ async function onStart(msg) {
   observer.resolve();
 }
 
+async function onShareContact(msg) {
+  const { phone_number } = msg.contact;
+  const chatId = getChatId(msg);
+  const user = await userServices.updateUserById(chatId, {
+    phoneNumber: phone_number,
+  });
+
+  const keyboard = user.level ? USER_MENU.secondScreen : USER_MENU.firstScreen;
+
+  await bot.sendMessage(chatId, 'Дякую за надану інформацію.', {
+    reply_markup: { keyboard },
+  });
+}
+
 export function initCommandControllers() {
   console.log('initCommandControllers');
 
   bot.onText(/\/start/, onStart);
+  bot.on('contact', onShareContact);
 }

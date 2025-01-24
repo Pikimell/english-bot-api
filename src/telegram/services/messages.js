@@ -5,6 +5,7 @@ export function newUserMessage({ userId, contactInfo: info }) {
 UserId: ${userId}
 UserName: @${info.username}
 FirstName: ${info.first_name || 'Анонім'}
+PhoneNumber: ${info.phoneNumber}
 `;
 }
 
