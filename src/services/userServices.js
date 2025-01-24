@@ -50,7 +50,7 @@ export const userServices = {
   // Оновити дані користувача
   async updateUserById(userId, updateData) {
     return await UserCollection.findOneAndUpdate({ userId }, updateData, {
-      new: false,
+      new: true,
     });
   },
 

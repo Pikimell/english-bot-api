@@ -1,11 +1,11 @@
 export const FIRST_MESSAGE = `Вітаємо у боті!`;
 
-export function newUserMessage({ userId, contactInfo: info }) {
+export function newUserMessage({ userId, contactInfo: info, phoneNumber }) {
   return `<b>Завітав новий котик!</b>
 UserId: ${userId}
 UserName: @${info.username}
 FirstName: ${info.first_name || 'Анонім'}
-PhoneNumber: ${info.phoneNumber}
+PhoneNumber: ${phoneNumber}
 `;
 }
 
