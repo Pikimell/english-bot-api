@@ -20,7 +20,8 @@ async function onStart(msg) {
 
   if (!oldUser) {
     userServices.createUser(user).catch(() => {});
-    await bot.sendMessage(chatId, FIRST_MESSAGE, {
+
+    await bot.sendMessage(chatId, FIRST_MESSAGE + 'TEST', {
       reply_markup: {
         keyboard: [
           [
