@@ -34,7 +34,7 @@ async function onStart(msg) {
         one_time_keyboard: true,
       },
     });
-    sendAdminMessage(newUserMessage(user));
+    // sendAdminMessage(newUserMessage(user));
   } else {
     const keyboard = oldUser.level
       ? USER_MENU.secondScreen
@@ -56,7 +56,7 @@ async function onShareContact(msg) {
   });
 
   const keyboard = user.level ? USER_MENU.secondScreen : USER_MENU.firstScreen;
-
+  sendAdminMessage(newUserMessage(user));
   await bot.sendMessage(chatId, 'Дякую за надану інформацію.', {
     reply_markup: { keyboard },
   });
