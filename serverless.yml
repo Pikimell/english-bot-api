@@ -15,6 +15,36 @@ provider:
   stage: dev
   profile: serverlessUser
   timeout: 20
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'events:PutRule' # Дозвіл на створення правил
+        - 'events:PutTargets' # Дозвіл на додавання цілей до правил
+        - 'events:RemoveTargets' # Дозвіл на видалення цілей із правил
+        - 'events:DeleteRule' # Дозвіл на видалення правил
+      Resource: 'arn:aws:events:us-east-2:*:rule/lesson_reminder_*' # Обмеження тільки для правил, які ти створюєш
+
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction' # Дозвіл на виклик Lambda-функцій
+      Resource: 'arn:aws:lambda:us-east-2:*:function:english-bot-api-dev-sendReminder' # Конкретна Lambda
+
+    - Effect: 'Allow'
+      Action:
+        - 'logs:CreateLogGroup' # Дозвіл на створення груп логів
+        - 'logs:CreateLogStream' # Дозвіл на створення потоків логів
+        - 'logs:PutLogEvents' # Дозвіл на запис логів
+      Resource: 'arn:aws:logs:us-east-2:*:*'
+
+resources:
+  Resources:
+    AllowEventBridgeInvokeLambda:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName: english-bot-api-dev-sendReminder
+        Action: lambda:InvokeFunction
+        Principal: events.amazonaws.com
+        SourceArn: 'arn:aws:events:us-east-2:884252207764:rule/lesson_reminder_*'
 
 functions:
   # !============ PAYMENT Handlers ===============
@@ -203,6 +233,14 @@ functions:
     events:
       - http:
           path: groups/{id}
+          method: put
+          cors: true
+
+  updateGroupScheduleById:
+    handler: src/handlers/groupHandlers.updateGroupScheduleByIdHandler
+    events:
+      - http:
+          path: groups/{id}/schedule
           method: put
           cors: true
 
@@ -435,3 +473,7 @@ functions:
           path: plan/{id}
           method: delete
           cors: true
+
+  # !============== SCHEDULE Handlers ===============
+  sendReminder:
+    handler: src/handlers/notificationHandler.sendRemainderHandler

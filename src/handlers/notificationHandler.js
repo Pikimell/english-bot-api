@@ -1,5 +1,6 @@
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { notificationController } from '../controllers/paymentControllers.js';
+import { sendRemaindController } from '../controllers/lessonControllers.js';
 
 export const notificationHandler = async (event, context) => {
   const ctrl = ctrlWrapper(notificationController);
@@ -11,4 +12,9 @@ export const notificationTestHandler = async (event, context) => {
     statusCode: 200,
     body: '{}',
   };
+};
+
+export const sendRemainderHandler = async (event, context) => {
+  const ctrl = ctrlWrapper(sendRemaindController);
+  return await ctrl(event, context);
 };

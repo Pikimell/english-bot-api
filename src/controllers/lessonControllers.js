@@ -81,3 +81,15 @@ export const deleteLessonByUser = async (event) => {
 
   return response(200)({ message: 'Lesson deleted successfully' });
 };
+
+export const sendRemaindController = async (event, context) => {
+  const { time, comments, userId, _id } = event;
+  const lesson = { time, comments, userId, _id };
+  const data = await sendRemainder(lesson);
+  return response(200)(data);
+};
+
+export const initSheduleLessonController = async (event, context) => {
+  const data = await initSheduleLesson();
+  return response(200)(data);
+};
