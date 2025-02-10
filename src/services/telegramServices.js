@@ -61,7 +61,7 @@ export async function telegramTickController() {
   }
 }
 
-async function sendReminder(groupId, info) {
+export async function sendReminder(groupId, info) {
   const userMessage = `<b>НАГАДУВАННЯ</b>
 Через годинку заплановано зустріч. 
 Посилання буде надіслано автоматично у цей чат!`;
@@ -85,7 +85,7 @@ async function sendReminder(groupId, info) {
           [
             {
               text: 'Надіслати посилання на Zoom',
-              callback_data: `sendRemainder/${groupId}`,
+              callback_data: `sendReminder/${groupId}`,
             },
           ],
         ],

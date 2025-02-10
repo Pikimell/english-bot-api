@@ -20,8 +20,8 @@ const onTodayList = async (msg) => {
   }
 };
 
-async function onSendRemainder(query) {
-  if (!query.data.startsWith('sendRemainder')) return;
+async function onSendReminder(query) {
+  if (!query.data.startsWith('sendReminder')) return;
   const groupId = query.data.split('/').pop();
   const chatId = getChatId(query);
   if (!isAdmin(chatId)) return;
@@ -58,5 +58,5 @@ https://us02web.zoom.us/j/5195311855?pwd=b3dNWUNLRGF5Z0ZjOHdJcHNiTGgxUT09`;
 export function initTeacherControllers() {
   console.log('initTeacherControllers');
   bot.onText(TRIGGER.teacher.today, onTodayList);
-  bot.on('callback_query', onSendRemainder);
+  bot.on('callback_query', onSendReminder);
 }

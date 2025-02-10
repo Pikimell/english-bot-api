@@ -476,4 +476,4 @@ functions:
 
   # !============== SCHEDULE Handlers ===============
   sendReminder:
-    handler: src/handlers/notificationHandler.sendRemainderHandler
+    handler: src/handlers/notificationHandler.sendReminderHandler

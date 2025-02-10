@@ -3,6 +3,7 @@ import { parseLessonFilterParams } from '../utils/parseFilterParams';
 import { parsePaginationParams } from '../utils/parsePaginationParams';
 import { parseLessonsSortParams } from '../utils/parseSortParams';
 import { response } from '../utils/response';
+import { sendReminder } from '../services/telegramServices.js';
 
 export const createLesson = async (event) => {
   const data = event.body;
@@ -83,13 +84,7 @@ export const deleteLessonByUser = async (event) => {
 };
 
 export const sendRemaindController = async (event, context) => {
-  const { time, comments, userId, _id } = event;
-  const lesson = { time, comments, userId, _id };
-  const data = await sendRemainder(lesson);
-  return response(200)(data);
-};
-
-export const initSheduleLessonController = async (event, context) => {
-  const data = await initSheduleLesson();
+  const { groupId, info } = event;
+  const data = await sendReminder(groupId, info);
   return response(200)(data);
 };

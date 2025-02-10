@@ -14,7 +14,7 @@ export const notificationTestHandler = async (event, context) => {
   };
 };
 
-export const sendRemainderHandler = async (event, context) => {
+export const sendReminderHandler = async (event, context) => {
   const ctrl = ctrlWrapper(sendRemaindController);
   return await ctrl(event, context);
 };

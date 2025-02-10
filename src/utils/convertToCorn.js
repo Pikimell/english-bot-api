@@ -1,12 +1,14 @@
+import { TIME_ZONE } from '../helpers/constants';
+
 export const convertDayTimeToCron = (day, time) => {
   const daysMap = {
-    Monday: '2',
-    Tuesday: '3',
-    Wednesday: '4',
-    Thursday: '5',
-    Friday: '6',
-    Saturday: '7',
-    Sunday: '1',
+    Пн: '2',
+    Вт: '3',
+    Ср: '4',
+    Чт: '5',
+    Пт: '6',
+    Сб: '7',
+    Нд: '1',
   };
 
   if (!daysMap[day]) {
@@ -15,5 +17,5 @@ export const convertDayTimeToCron = (day, time) => {
 
   const [hours, minutes] = time.split(':').map(Number);
 
-  return `${minutes} ${hours} * * ${daysMap[day]}`;
+  return `${minutes} ${hours - 1} ? * ${daysMap[day]} *`;
 };
