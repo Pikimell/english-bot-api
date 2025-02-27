@@ -10,6 +10,7 @@ import {
 import { initBot } from '../telegram/init-bot.js';
 // import { sleep } from '../utils/delay.js';
 import { observer } from '../helpers/observer.js';
+import { parseMultipartFormData } from '../utils/parseMultipartFormData.js';
 
 export const telegramHandler = async (event, context) => {
   const ctrl = ctrlWrapper(async (event, context) => {
@@ -64,5 +65,27 @@ export const googleFormHandler = async (event, context) => {
     }
     return response(200)(body);
   });
+  return await ctrl(event, context);
+};
+
+export const telegramSendFileHandler = async (event, context) => {
+  const ctrl = ctrlWrapper(async (event, context) => {
+    const { fields, files } = await parseMultipartFormData(event);
+
+    const chatId = fields.chatId?.[0];
+    if (!chatId) {
+      return response(400)({ error: 'Не вказано chatId' });
+    }
+
+    const file = files.file?.[0];
+    if (!file) {
+      return response(400)({ error: 'Не надіслано файл' });
+    }
+
+    await botSendFile(chatId, file);
+
+    return response(200)({ ok: true, result: true });
+  });
+
   return await ctrl(event, context);
 };

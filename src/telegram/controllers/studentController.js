@@ -20,14 +20,14 @@ async function onTestLesson(msg) {
     first_name: msg.from.first_name,
     username: msg.from.username,
   };
-  bot.sendMessage(chatId, testLessonMessage(), { parse_mode: 'HTML' });
+  await bot.sendMessage(chatId, testLessonMessage(), { parse_mode: 'HTML' });
   sendAdminMessage(adminTestLessonMessage(user));
   observer.resolve();
 }
 
 async function onCheckLevel(msg) {
   const chatId = getChatId(msg);
-  bot.sendMessage(chatId, 'Оберіть тест для проходження:', {
+  await bot.sendMessage(chatId, 'Оберіть тест для проходження:', {
     reply_markup: {
       inline_keyboard: USER_MENU.testList,
     },
@@ -39,7 +39,7 @@ async function onBalance(msg) {
   const chatId = getChatId(msg);
   const balance = await userServices.getUserBalance(chatId);
   const message = userBalance(balance);
-  bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+  await bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
   observer.resolve();
 }
 

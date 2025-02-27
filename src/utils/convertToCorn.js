@@ -1,5 +1,3 @@
-import { TIME_ZONE } from '../helpers/constants';
-
 export const convertDayTimeToCron = (day, time) => {
   const daysMap = {
     Пн: '2',

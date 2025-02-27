@@ -1,4 +1,6 @@
 import axios from 'axios';
+import FormData from 'form-data';
+import fs from 'fs';
 import { ADMINS, TELEGRAM_TOKEN, TIME_ZONE } from '../helpers/constants';
 import { userServices } from './userServices';
 import { paymentServices } from './paymentServices';
@@ -93,3 +95,29 @@ export async function sendReminder(groupId, info) {
     });
   }
 }
+
+/**
+ * Відправка файлу у Telegram
+ * @param {string} chatId - ID чату
+ * @param {Object} file - Файл із multipart-form-data
+ */
+export const botSendFile = async (chatId, file) => {
+  const formData = new FormData();
+  formData.append('chat_id', chatId);
+  formData.append(
+    'document',
+    fs.createReadStream(file.path),
+    file.originalFilename,
+  );
+
+  return axios
+    .post(`${BASE_URL}/sendDocument`, formData, {
+      headers: {
+        ...formData.getHeaders(),
+      },
+    })
+    .catch((err) => {
+      console.error('Помилка відправки файлу:', err);
+      throw err;
+    });
+};

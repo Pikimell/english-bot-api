@@ -86,6 +86,13 @@ functions:
           path: /telegram/message
           method: post
           cors: true
+  telegramSendFile:
+    handler: src/handlers/telegramHandlers.telegramSendFileHandler
+    events:
+      - http:
+          path: /telegram/send-file
+          method: post
+          cors: true
 
   # !============ Google Form Handlers ===============
 
