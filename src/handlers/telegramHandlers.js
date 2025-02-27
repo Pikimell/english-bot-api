@@ -3,12 +3,12 @@ import telegramBot from '../telegram/connect.js';
 import { response } from '../utils/response.js';
 import { ADMINS, TELEGRAM_TOKEN } from '../helpers/constants.js';
 import {
+  botSendFile,
   botSendMessage,
   sendMessage,
   telegramTickController,
 } from '../services/telegramServices.js';
 import { initBot } from '../telegram/init-bot.js';
-// import { sleep } from '../utils/delay.js';
 import { observer } from '../helpers/observer.js';
 import { parseMultipartFormData } from '../utils/parseMultipartFormData.js';
 

@@ -1,5 +1,5 @@
 export const observer = {
-  promise: null,
+  promise: Promise.resolve(),
   init() {
     const observer = this;
     this.promise = new Promise((res) => {
