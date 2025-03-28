@@ -17,7 +17,7 @@ export const userServices = {
 
   // Отримати всіх користувачів
   async getAllUsers({ filters, sort = {}, pagination = {} }) {
-    const { page = 1, perPage = 10 } = pagination;
+    const { page = 1, perPage = 1000 } = pagination;
 
     const { sortBy = 'createdAt', sortOrder = 'asc' } = sort;
 

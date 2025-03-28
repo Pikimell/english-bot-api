@@ -1,4 +1,4 @@
-import { PostCollection } from '../db/models/post';
+import { PostCollection } from '../db/models/post.js';
 
 export const postServices = {
   createPost: async (data) => {

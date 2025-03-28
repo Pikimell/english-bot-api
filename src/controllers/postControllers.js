@@ -1,5 +1,5 @@
-import { postServices } from '../services/postServices';
-import { response } from '../utils/response';
+import { postServices } from '../services/postServices.js';
+import { response } from '../utils/response.js';
 
 export const createPost = async (event) => {
   const data = event.body;

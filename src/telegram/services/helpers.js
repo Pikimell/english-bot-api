@@ -23,9 +23,9 @@ export async function addQueryListener(event, callback, chatId) {
   });
 }
 
-export function sendAdminMessage(message) {
+export async function sendAdminMessage(message) {
   for (const admin of ADMINS) {
-    bot.sendMessage(admin, message, {
+    await bot.sendMessage(admin, message, {
       parse_mode: 'HTML',
     });
   }

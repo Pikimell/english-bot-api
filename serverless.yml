@@ -1,11 +1,9 @@
 service: english-bot-api
 
-frameworkVersion: '3'
+frameworkVersion: '4'
 
 plugins:
-  - serverless-bundle
   - serverless-offline
-  - serverless-dotenv-plugin
 
 provider:
   name: aws
@@ -239,14 +237,6 @@ functions:
     events:
       - http:
           path: groups/{id}
-          method: put
-          cors: true
-
-  updateGroupScheduleById:
-    handler: src/handlers/groupHandlers.updateGroupScheduleByIdHandler
-    events:
-      - http:
-          path: groups/{id}/schedule
           method: put
           cors: true
 
@@ -487,7 +477,7 @@ functions:
   # !============== Reminder Handlers ===============
 
   addReminder:
-    handler: src/handlers/sheduledHandlers.addReminderHandler
+    handler: src/handlers/scheduledHandlers.addReminderHandler
     events:
       - http:
           path: reminders
@@ -495,7 +485,7 @@ functions:
           cors: true
 
   removeReminder:
-    handler: src/handlers/sheduledHandlers.removeReminderHandler
+    handler: src/handlers/scheduledHandlers.removeReminderHandler
     events:
       - http:
           path: reminders/{id}
@@ -503,9 +493,17 @@ functions:
           cors: true
 
   removeGroupReminder:
-    handler: src/handlers/sheduledHandlers.removeGroupReminderHandler
+    handler: src/handlers/scheduledHandlers.removeGroupReminderHandler
     events:
       - http:
           path: reminders/group/{groupId}
           method: delete
+          cors: true
+
+  getAllReminders:
+    handler: src/handlers/scheduledHandlers.getAllRemindersHandler
+    events:
+      - http:
+          path: reminders
+          method: get
           cors: true

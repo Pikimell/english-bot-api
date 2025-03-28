@@ -7,14 +7,17 @@ export const convertToCron = ({ day, date, time }) => {
 };
 
 export const convertDateTimeToCron = (userDate, time) => {
-  const reminderDate = new Date(`${userDate}T${time}:00Z`);
-  const minutes = reminderDate.getUTCMinutes();
-  const hours = reminderDate.getUTCHours();
-  const date = reminderDate.getUTCDate();
-  const month = reminderDate.getUTCMonth() + 1;
-  const year = reminderDate.getUTCFullYear();
+  const [hours, minutes] = time.split(':');
+  const date = new Date(userDate);
 
-  const cronExpression = `${minutes} ${hours} ${date} ${month} ? ${year}`;
+  const minute = String(minutes).padStart(2, '0');
+  const hour = String(hours).padStart(2, '0');
+  const day = String(date.getUTCDate());
+  const month = String(date.getUTCMonth() + 1);
+
+  // Формат AWS cron: "minute hour day month ? *"
+  const cronExpression = `cron(${minute} ${hour} ${day} ${month} ? *)`;
+
   return cronExpression;
 };
 
@@ -35,5 +38,5 @@ export const convertDayTimeToCron = (day, time) => {
 
   const [hours, minutes] = time.split(':').map(Number);
 
-  return `${minutes} ${hours - 1} ? * ${daysMap[day]} *`;
+  return `cron(${minutes} ${hours - 1} ? * ${daysMap[day]} *)`;
 };

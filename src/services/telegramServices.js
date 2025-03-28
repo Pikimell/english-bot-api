@@ -1,10 +1,11 @@
 import axios from 'axios';
 import FormData from 'form-data';
 import fs from 'fs';
-import { ADMINS, TELEGRAM_TOKEN, TIME_ZONE } from '../helpers/constants';
-import { userServices } from './userServices';
-import { paymentServices } from './paymentServices';
-import { groupServices } from './groupServices';
+import { ADMINS, TELEGRAM_TOKEN, TIME_ZONE } from '../helpers/constants.js';
+import { userServices } from './userServices.js';
+import { paymentServices } from './paymentServices.js';
+import { groupServices } from './groupServices.js';
+
 const BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 
 export const sendMessage = async (chatId, message, callback) => {

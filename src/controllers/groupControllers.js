@@ -1,9 +1,5 @@
-import { groupServices } from '../services/groupServices';
-import {
-  deleteGroupReminder,
-  scheduleGroupReminder,
-} from '../services/sheduledService';
-import { response } from '../utils/response';
+import { groupServices } from '../services/groupServices.js';
+import { response } from '../utils/response.js';
 
 export const createGroup = async (event) => {
   const data = event.body;

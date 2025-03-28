@@ -1,6 +1,6 @@
 import { GroupCollection } from '../db/models/group.js';
 import { ScheduleCollection } from '../db/models/schedule.js';
-import { removeGroupReminder } from './sheduledService.js';
+import { removeGroupReminder } from './scheduledService.js';
 
 export const groupServices = {
   createGroup: async (data) => {

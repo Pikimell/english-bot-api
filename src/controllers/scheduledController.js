@@ -1,4 +1,4 @@
-import { response } from '../helpers/response.js';
+import { response } from '../utils/response.js';
 import * as scheduledService from '../services/scheduledService.js';
 
 export const addReminderController = async (event) => {
@@ -16,5 +16,11 @@ export const removeReminderController = async (event) => {
 export const removeGroupReminderController = async (event) => {
   const { groupId } = event.pathParameters;
   const result = await scheduledService.removeGroupReminder(groupId);
+  return response(200)(result);
+};
+
+export const getAllRemindersController = async (event) => {
+  const filters = event.queryStringParameters || {};
+  const result = await scheduledService.getAllReminders(filters);
   return response(200)(result);
 };

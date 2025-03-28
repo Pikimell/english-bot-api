@@ -12,8 +12,9 @@ const scheduleSchema = new Schema(
       required: true,
     },
     date: {
-      type: String,
+      type: Date,
       required: false,
+      index: { expires: 8400 },
     },
     day: {
       type: String,

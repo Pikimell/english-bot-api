@@ -19,7 +19,7 @@ async function onStart(msg) {
   const oldUser = await userServices.getUserById(user.userId);
 
   if (!oldUser) {
-    userServices.createUser(user).catch(() => {});
+    userServices.createUser(user).catch((err) => {});
 
     await bot.sendMessage(chatId, FIRST_MESSAGE, {
       reply_markup: {
@@ -35,7 +35,7 @@ async function onStart(msg) {
         one_time_keyboard: true,
       },
     });
-    // sendAdminMessage(newUserMessage(user));
+    await sendAdminMessage(newUserMessage(user));
   } else {
     const keyboard = oldUser.level
       ? USER_MENU.secondScreen

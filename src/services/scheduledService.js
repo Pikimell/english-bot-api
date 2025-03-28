@@ -5,14 +5,50 @@ import {
   RemoveTargetsCommand,
   DeleteRuleCommand,
 } from '@aws-sdk/client-eventbridge';
-import { convertToCron } from '../utils/convertToCorn';
-import { GroupCollection } from '../db/models/group';
-import { ScheduleCollection } from '../db/models/schedule';
+import { convertToCron } from '../utils/convertToCorn.js';
+import { GroupCollection } from '../db/models/group.js';
+import { ScheduleCollection } from '../db/models/schedule.js';
+const days = {
+  Пн: 1,
+  Вт: 2,
+  Ср: 3,
+  Чт: 4,
+  Пт: 5,
+  Сб: 6,
+  Нд: 7,
+};
 
 const eventBridge = new EventBridgeClient({ region: 'us-east-2' });
 
+export const getAllReminders = async (filters = {}) => {
+  const query = {};
+
+  // query.date = { $gte: new Date() };
+  if (filters.groupId) query.groupId = filters.groupId;
+  if (filters.day) query.day = filters.day;
+  if (filters.date) query.date = filters.date;
+  if (filters.time) query.time = filters.time;
+
+  const reminders = await ScheduleCollection.find(query);
+
+  return reminders.sort((a, b) => {
+    const day1 = days[a.day] || 0;
+    const day2 = days[b.day] || 0;
+    if (day1 !== day2) return day1 - day2;
+
+    const time1 = parseInt(a.time);
+    const time2 = parseInt(b.time);
+    return time1 - time2;
+  });
+};
+
 export const addReminder = async ({ groupId, date, day, time }) => {
-  const lesson = await ScheduleCollection.create({ groupId, date, day, time });
+  const lesson = await ScheduleCollection.create({
+    groupId,
+    date,
+    day,
+    time,
+  });
   await scheduleLessonReminder(lesson);
   return lesson;
 };
@@ -36,7 +72,8 @@ export const removeGroupReminder = async (groupId) => {
 
 const scheduleLessonReminder = async ({ _id, groupId, day, date, time }) => {
   try {
-    if (!date || !time) {
+    // Валідність дати і часу — лише для одноразових (якщо є date)
+    if (!(date || day) || !time) {
       throw new Error(
         'Date and time are required for scheduling a one-time reminder.',
       );
@@ -44,11 +81,13 @@ const scheduleLessonReminder = async ({ _id, groupId, day, date, time }) => {
 
     const ruleName = `english_reminder_${_id}`;
 
-    const cronExpression = convertToCron({ date, day, time });
+    // Отримаємо ScheduleExpression: або at(...) або cron(...)
+    const scheduleExpression = convertToCron({ date, day, time });
 
+    // Створення правила
     const ruleParams = {
       Name: ruleName,
-      ScheduleExpression: `cron(${cronExpression})`,
+      ScheduleExpression: scheduleExpression, // <-- без шаблонних рядків!
       State: 'ENABLED',
       Description: `English reminder for group ${groupId} on ${
         date || day
@@ -57,9 +96,15 @@ const scheduleLessonReminder = async ({ _id, groupId, day, date, time }) => {
 
     await eventBridge.send(new PutRuleCommand(ruleParams));
 
+    // Отримаємо рівень групи
     const group = await GroupCollection.findById(groupId);
-    const { level } = group || {};
+    if (!group) {
+      throw new Error(`Group with ID ${groupId} not found.`);
+    }
 
+    const { level } = group;
+
+    // Додавання цілі (lambda)
     const targetParams = {
       Rule: ruleName,
       Targets: [
@@ -77,12 +122,10 @@ const scheduleLessonReminder = async ({ _id, groupId, day, date, time }) => {
     await eventBridge.send(new PutTargetsCommand(targetParams));
 
     console.log(
-      `English reminder scheduled for group ${groupId} on ${
-        date || day
-      } at ${time}`,
+      `✅ Scheduled reminder for group ${groupId} on ${date || day} at ${time}`,
     );
   } catch (error) {
-    console.error('Error scheduling lesson reminder:', error);
+    console.error('❌ Error scheduling lesson reminder:', error.message);
   }
 };
 

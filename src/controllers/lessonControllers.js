@@ -1,8 +1,8 @@
-import { lessonServices } from '../services/lessonServices';
-import { parseLessonFilterParams } from '../utils/parseFilterParams';
-import { parsePaginationParams } from '../utils/parsePaginationParams';
-import { parseLessonsSortParams } from '../utils/parseSortParams';
-import { response } from '../utils/response';
+import { lessonServices } from '../services/lessonServices.js';
+import { parseLessonFilterParams } from '../utils/parseFilterParams.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseLessonsSortParams } from '../utils/parseSortParams.js';
+import { response } from '../utils/response.js';
 import { sendReminder } from '../services/telegramServices.js';
 
 export const createLesson = async (event) => {

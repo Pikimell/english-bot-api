@@ -1,13 +1,13 @@
 import {
   botSendMessage,
   sendMessagePayment,
-} from '../services/telegramServices';
-import { userServices } from '../services/userServices';
-import { USER_MENU } from '../telegram/models/user-keyboard';
-import { parseUserFilterParams } from '../utils/parseFilterParams';
-import { parsePaginationParams } from '../utils/parsePaginationParams';
-import { parseLessonsSortParams } from '../utils/parseSortParams';
-import { response } from '../utils/response'; // Утиліта для уніфікованої відповіді
+} from '../services/telegramServices.js';
+import { userServices } from '../services/userServices.js';
+import { USER_MENU } from '../telegram/models/user-keyboard.js';
+import { parseUserFilterParams } from '../utils/parseFilterParams.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseLessonsSortParams } from '../utils/parseSortParams.js';
+import { response } from '../utils/response.js'; // Утиліта для уніфікованої відповіді
 
 // Отримати користувача за ID
 export const getUser = async (event) => {
@@ -73,6 +73,8 @@ export const updateUserLevel = async (event) => {
 // Видалити користувача
 export const deleteUser = async (event) => {
   const { id } = event.pathParameters;
+  console.log(id);
+
   const deletedUser = await userServices.deleteUserById(id);
 
   if (!deletedUser) {

@@ -4,8 +4,8 @@ import {
   getPlanById as getPlanByIdS,
   updatePlanById as updatePlanByIdS,
   deletePlanById as deletePlanByIdS,
-} from '../services/planServices';
-import { response } from '../utils/response';
+} from '../services/planServices.js';
+import { response } from '../utils/response.js';
 
 export const createPlan = async (event) => {
   const data = event.body;

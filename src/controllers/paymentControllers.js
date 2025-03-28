@@ -1,8 +1,14 @@
-import { ADMINS } from '../helpers/constants';
-import { createPaymentUrl, paymentServices } from '../services/paymentServices';
-import { sendMessage, sendMessagePayment } from '../services/telegramServices';
-import { userServices } from '../services/userServices';
-import { response } from '../utils/response';
+import { ADMINS } from '../helpers/constants.js';
+import {
+  createPaymentUrl,
+  paymentServices,
+} from '../services/paymentServices.js';
+import {
+  sendMessage,
+  sendMessagePayment,
+} from '../services/telegramServices.js';
+import { userServices } from '../services/userServices.js';
+import { response } from '../utils/response.js';
 
 export const createPayment = async (event) => {
   const data = event.body;
