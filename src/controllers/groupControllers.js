@@ -1,7 +1,7 @@
 import { groupServices } from '../services/groupServices';
 import {
-  deleteLessonReminder,
-  scheduleLessonReminder,
+  deleteGroupReminder,
+  scheduleGroupReminder,
 } from '../services/sheduledService';
 import { response } from '../utils/response';
 
@@ -27,6 +27,7 @@ export const getAllGroups = async (e) => {
   const groups = await groupServices.getAllGroups(filters);
   return response(200)(groups);
 };
+
 export const getScheduleController = async (e) => {
   const groups = await groupServices.getSchedule();
   return response(200)(groups);
@@ -42,20 +43,6 @@ export const updateGroupById = async (event) => {
     return response(404)({ message: 'Group not found' });
   }
 
-  return response(200)(updatedGroup);
-};
-export const updateGroupScheduleById = async (event) => {
-  const { id } = event.pathParameters;
-  const updateData = event.body;
-
-  await deleteLessonReminder(id);
-  const updatedGroup = await groupServices.updateGroupById(id, updateData);
-
-  if (!updatedGroup) {
-    return response(404)({ message: 'Group not found' });
-  }
-
-  await scheduleLessonReminder(updatedGroup);
   return response(200)(updatedGroup);
 };
 

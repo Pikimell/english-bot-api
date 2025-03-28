@@ -4,6 +4,7 @@ import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 export const lessonServices = {
   createLesson: async (data) => {
     const lesson = new LessonCollection(data);
+
     return await lesson.save();
   },
 

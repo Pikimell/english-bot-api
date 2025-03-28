@@ -40,22 +40,20 @@ async function onSendReminder(query) {
     promises.push(promise);
   }
 
-  let counter = 0;
   for (const { userId } of students) {
     const message = `***Welcome😉***
   
 Посилання на заняття: 
 https://us02web.zoom.us/j/5195311855?pwd=b3dNWUNLRGF5Z0ZjOHdJcHNiTGgxUT09`;
-    const promise = bot.sendMessage(userId, counter + message, {
+    const promise = bot.sendMessage(userId, message, {
       parse_mode: 'Markdown',
     });
-    const promise1 = bot.sendMessage(userId, JSON.stringify(students));
-    promises.push(promise, promise1);
-    counter++;
+
+    promises.push(promise);
   }
 
   await Promise.all(promises).catch(() => {});
-  deleteMsg(chatId, query.message.message_id);
+  await deleteMsg(chatId, query.message.message_id).catch(() => {});
 }
 
 export function initTeacherControllers() {

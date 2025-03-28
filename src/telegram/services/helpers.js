@@ -9,7 +9,7 @@ export function getChatId(obj = {}) {
 }
 
 export function deleteMsg(chatId, msgId) {
-  bot.deleteMessage(chatId, msgId);
+  return bot.deleteMessage(chatId, msgId);
 }
 
 export async function addQueryListener(event, callback, chatId) {

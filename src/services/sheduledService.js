@@ -5,85 +5,106 @@ import {
   RemoveTargetsCommand,
   DeleteRuleCommand,
 } from '@aws-sdk/client-eventbridge';
-import { convertDayTimeToCron } from '../utils/convertToCorn';
+import { convertToCron } from '../utils/convertToCorn';
 import { GroupCollection } from '../db/models/group';
+import { ScheduleCollection } from '../db/models/schedule';
 
 const eventBridge = new EventBridgeClient({ region: 'us-east-2' });
-export const scheduleLessonReminder = async (group) => {
-  const { schedule = [], level } = group;
-  const groupId = group._id;
 
-  for (const item of schedule) {
-    try {
-      const { time, day, _id } = item;
+export const addReminder = async ({ groupId, date, day, time }) => {
+  const lesson = await ScheduleCollection.create({ groupId, date, day, time });
+  await scheduleLessonReminder(lesson);
+  return lesson;
+};
 
-      if (!time || !day) {
-        throw new Error(
-          'Lesson time and day are required for scheduling a reminder.',
-        );
-      }
-      const ruleName = `lesson_reminder_${_id}`;
-      const cronExpression = convertDayTimeToCron(day, time);
+export const removeReminder = async (id) => {
+  await ScheduleCollection.findByIdAndDelete(id);
+  await deleteOneTimeReminder(id);
+};
 
-      const ruleParams = {
-        Name: ruleName,
-        ScheduleExpression: `cron(${cronExpression})`,
-        State: 'ENABLED',
-        Description: `Weekly reminder for group ${groupId} on ${day} at ${time}.`,
-      };
+export const removeGroupReminder = async (groupId) => {
+  const items = await ScheduleCollection.find({ groupId });
+  const promises = [];
 
-      await eventBridge.send(new PutRuleCommand(ruleParams));
+  for (const elem of items) {
+    const promise = removeReminder(elem._id);
+    promises.push(promise);
+  }
 
-      const targetParams = {
-        Rule: ruleName,
-        Targets: [
-          {
-            Id: '1',
-            Arn: 'arn:aws:lambda:us-east-2:884252207764:function:english-bot-api-dev-sendReminder',
-            Input: JSON.stringify({
-              groupId,
-              info: { level, lesson: { time } },
-            }),
-          },
-        ],
-      };
+  return Promise.all(promises);
+};
 
-      await eventBridge.send(new PutTargetsCommand(targetParams));
-
-      console.log(
-        `Success!! Weekly reminder scheduled for group ${groupId} on ${day} at ${time}`,
+const scheduleLessonReminder = async ({ _id, groupId, day, date, time }) => {
+  try {
+    if (!date || !time) {
+      throw new Error(
+        'Date and time are required for scheduling a one-time reminder.',
       );
-    } catch (error) {
-      console.error('Error scheduling lesson reminder:', error);
     }
+
+    const ruleName = `english_reminder_${_id}`;
+
+    const cronExpression = convertToCron({ date, day, time });
+
+    const ruleParams = {
+      Name: ruleName,
+      ScheduleExpression: `cron(${cronExpression})`,
+      State: 'ENABLED',
+      Description: `English reminder for group ${groupId} on ${
+        date || day
+      } at ${time}.`,
+    };
+
+    await eventBridge.send(new PutRuleCommand(ruleParams));
+
+    const group = await GroupCollection.findById(groupId);
+    const { level } = group || {};
+
+    const targetParams = {
+      Rule: ruleName,
+      Targets: [
+        {
+          Id: '1',
+          Arn: 'arn:aws:lambda:us-east-2:884252207764:function:english-bot-api-dev-sendReminder',
+          Input: JSON.stringify({
+            groupId,
+            info: { level, lesson: { time } },
+          }),
+        },
+      ],
+    };
+
+    await eventBridge.send(new PutTargetsCommand(targetParams));
+
+    console.log(
+      `English reminder scheduled for group ${groupId} on ${
+        date || day
+      } at ${time}`,
+    );
+  } catch (error) {
+    console.error('Error scheduling lesson reminder:', error);
   }
 };
 
-export const deleteLessonReminder = async (groupId) => {
-  const group = await GroupCollection.findById(groupId);
+const deleteOneTimeReminder = async (id) => {
+  try {
+    const ruleName = `english_reminder_${id}`;
 
-  const schedule = group.schedule;
+    await eventBridge.send(
+      new RemoveTargetsCommand({
+        Rule: ruleName,
+        Ids: ['1'],
+      }),
+    );
 
-  for (const item of schedule) {
-    const { _id } = item;
-    try {
-      const ruleName = `lesson_reminder_${_id}`;
+    await eventBridge.send(
+      new DeleteRuleCommand({
+        Name: ruleName,
+      }),
+    );
 
-      await eventBridge.send(
-        new RemoveTargetsCommand({
-          Rule: ruleName,
-          Ids: ['1'],
-        }),
-      );
-
-      // Видаляємо саме правило
-      await eventBridge.send(
-        new DeleteRuleCommand({
-          Name: ruleName,
-        }),
-      );
-    } catch (error) {
-      console.error('Error deleting lesson reminder:', error);
-    }
+    console.log(`English reminder deleted(rule: ${ruleName})`);
+  } catch (error) {
+    console.error('Error deleting one-time reminder:', error);
   }
 };

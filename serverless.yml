@@ -1,4 +1,3 @@
-org: author
 service: english-bot-api
 
 frameworkVersion: '3'
@@ -484,3 +483,29 @@ functions:
   # !============== SCHEDULE Handlers ===============
   sendReminder:
     handler: src/handlers/notificationHandler.sendReminderHandler
+
+  # !============== Reminder Handlers ===============
+
+  addReminder:
+    handler: src/handlers/sheduledHandlers.addReminderHandler
+    events:
+      - http:
+          path: reminders
+          method: post
+          cors: true
+
+  removeReminder:
+    handler: src/handlers/sheduledHandlers.removeReminderHandler
+    events:
+      - http:
+          path: reminders/{id}
+          method: delete
+          cors: true
+
+  removeGroupReminder:
+    handler: src/handlers/sheduledHandlers.removeGroupReminderHandler
+    events:
+      - http:
+          path: reminders/group/{groupId}
+          method: delete
+          cors: true

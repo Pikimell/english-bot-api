@@ -1,3 +1,23 @@
+export const convertToCron = ({ day, date, time }) => {
+  if (date) {
+    return convertDateTimeToCron(date, time);
+  } else {
+    return convertDayTimeToCron(day, time);
+  }
+};
+
+export const convertDateTimeToCron = (userDate, time) => {
+  const reminderDate = new Date(`${userDate}T${time}:00Z`);
+  const minutes = reminderDate.getUTCMinutes();
+  const hours = reminderDate.getUTCHours();
+  const date = reminderDate.getUTCDate();
+  const month = reminderDate.getUTCMonth() + 1;
+  const year = reminderDate.getUTCFullYear();
+
+  const cronExpression = `${minutes} ${hours} ${date} ${month} ? ${year}`;
+  return cronExpression;
+};
+
 export const convertDayTimeToCron = (day, time) => {
   const daysMap = {
     Пн: '2',
