@@ -11,7 +11,7 @@ export const convertDateTimeToCron = (userDate, time) => {
   const date = new Date(userDate);
 
   const minute = String(minutes).padStart(2, '0');
-  const hour = String(hours).padStart(2, '0');
+  const hour = String(hours - 1 - 1).padStart(2, '0');
   const day = String(date.getUTCDate());
   const month = String(date.getUTCMonth() + 1);
 
@@ -38,5 +38,5 @@ export const convertDayTimeToCron = (day, time) => {
 
   const [hours, minutes] = time.split(':').map(Number);
 
-  return `cron(${minutes} ${hours - 1} ? * ${daysMap[day]} *)`;
+  return `cron(${minutes} ${hours - 1 - 1} ? * ${daysMap[day]} *)`;
 };

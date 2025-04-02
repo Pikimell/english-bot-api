@@ -19,7 +19,7 @@ provider:
         - 'events:PutTargets' # Дозвіл на додавання цілей до правил
         - 'events:RemoveTargets' # Дозвіл на видалення цілей із правил
         - 'events:DeleteRule' # Дозвіл на видалення правил
-      Resource: 'arn:aws:events:us-east-2:*:rule/lesson_reminder_*' # Обмеження тільки для правил, які ти створюєш
+      Resource: 'arn:aws:events:us-east-2:*:rule/*' # Обмеження тільки для правил, які ти створюєш
 
     - Effect: 'Allow'
       Action:
