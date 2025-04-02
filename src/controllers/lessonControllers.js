@@ -86,10 +86,6 @@ export const deleteLessonByUser = async (event) => {
 export const sendRemaindController = async (event, context) => {
   const { groupId, info } = event;
 
-  console.log(event);
-
-  console.log(groupId, info);
-
   const data = await sendReminder(groupId, info);
   return response(200)(data);
 };

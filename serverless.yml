@@ -41,7 +41,7 @@ resources:
         FunctionName: english-bot-api-dev-sendReminder
         Action: lambda:InvokeFunction
         Principal: events.amazonaws.com
-        SourceArn: 'arn:aws:events:us-east-2:884252207764:rule/lesson_reminder_*'
+        SourceArn: 'arn:aws:events:us-east-2:884252207764:rule/*'
 
 functions:
   # !============ PAYMENT Handlers ===============
