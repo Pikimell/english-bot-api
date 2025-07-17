@@ -69,6 +69,7 @@ functions:
           path: /telegramHook/{token}
           method: post
           cors: true
+
   telegramTick:
     handler: src/handlers/telegramHandlers.telegramTickHandler
     events:
@@ -76,6 +77,7 @@ functions:
           path: /telegram/tick
           method: get
           cors: true
+
   telegramMessage:
     handler: src/handlers/telegramHandlers.telegramMessageHandler
     events:
@@ -83,6 +85,7 @@ functions:
           path: /telegram/message
           method: post
           cors: true
+
   telegramSendFile:
     handler: src/handlers/telegramHandlers.telegramSendFileHandler
     events:

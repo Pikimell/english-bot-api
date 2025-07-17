@@ -7,7 +7,7 @@ export const ONE_DAY = ONE_HOUR * 24;
 export const ONE_WEEK = ONE_DAY * 7;
 export const ONE_MONTH = ONE_DAY * 31;
 export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
-export const ADMINS = ['5103686914']; //'433982686'
+export const ADMINS = ['5103686914'];
 export const TIME_ZONE = 2;
 
 export const PAYMENT = {
